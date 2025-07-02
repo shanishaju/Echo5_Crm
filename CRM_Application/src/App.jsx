@@ -1,29 +1,22 @@
-import React, { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
-import Navbar from "./components/Navbar";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
-import AdminDashboard from "./pages/AdminDashboard";
-import EmployeeDashboard from "./pages/EmployeeDashboard";
 import Register from "./pages/Register";
+import EmployeeDashboard from "./pages/EmployeeDashboard"; // ✅ Ensure this exists
+import AdminDashboard from "./pages/AdminDashboard"; // ✅ Ensure this exists
+import Navbar from "./components/Navbar";
+import { Toaster } from "sonner";
 
 function App() {
-  const [user, setUser] = useState(null);
-
-  const handleLogin = (userData) => setUser(userData);
-  const handleLogout = () => setUser(null);
-
   return (
     <Router>
-      <Navbar onLogout={handleLogout} user={user} />
+      <Toaster position="top-center" />
+      <Navbar />
       <Routes>
-        <Route path="/" element={<Register />} />
+        <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />}></Route>
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={<EmployeeDashboard />} />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </Router>
   );
