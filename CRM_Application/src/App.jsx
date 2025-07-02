@@ -21,9 +21,8 @@ function App() {
     <Router>
       <Navbar onLogout={handleLogout} user={user} />
       <Routes>
-        <Route path="/" element={<AdminDashboard />} />
-        <Route path="/login" element={<Login onLogin={handleLogin} />} />
-        <Route path="*" element={<Login />} />
+        <Route path="/" element={<Register />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />}></Route>
       </Routes>
     </Router>

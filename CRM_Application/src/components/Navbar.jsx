@@ -3,7 +3,7 @@ import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 
 const Navbar = ({ onLogout, user }) => {
   return (
-    <AppBar position="static" color="primary" sx={{ px: 2 }}>
+    <AppBar position="static"  sx={{ px: 2 ,backgroundColor:'#8525e7'}}>
       <Toolbar>
         <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
           Echo5 Employee Tracker
