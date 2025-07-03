@@ -1,11 +1,1 @@
-import React from 'react'
-
-function Attendance() {
-  return (
-    <div>
-      
-    </div>
-  )
-}
-
-export default Attendance
+// This file was removed as part of project cleanup. It was empty or unused.
