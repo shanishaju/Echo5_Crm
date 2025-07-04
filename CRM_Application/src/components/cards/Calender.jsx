@@ -11,7 +11,7 @@ function Calender() {
     <Box 
       display="flex" 
       justifyContent="center" 
-      sx={{ minHeight: 700,py:2 }} // Increase minHeight and add vertical padding
+      sx={{ minHeight: 700,py:2 }} 
     >
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DateCalendar
