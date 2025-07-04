@@ -1,7 +1,7 @@
 /* Minimal global styles for the CRM app */
-
+@import "tailwindcss";
 body {
   margin: 0;
-  font-family: 'Inter', Arial, sans-serif;
+  /* font-family:  Arial, sans-serif; */
   background: #f8f9fb;
 }

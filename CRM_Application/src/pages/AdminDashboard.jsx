@@ -1,6 +1,5 @@
 import React from "react";
 import { Box, Grid, Paper, Typography, Divider } from "@mui/material";
-import Navbar from "../components/Navbar";
 
 const dataCards = [
   { title: "Total Users", value: 120 },
