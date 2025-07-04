@@ -58,7 +58,7 @@ function EmployeeDashboard() {
             textAlign: "center",
           }}
         >
-          ⚠️ This page is under construction...
+          ⚠️ This page is under maintenance mode
           <Typography variant="body2" mt={1}>
             Closing in 3 seconds...
           </Typography>
