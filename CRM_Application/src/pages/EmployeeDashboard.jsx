@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Grid } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Grid, Typography } from "@mui/material";
 import DashBoardSidebar from "../components/Sidebar/DashBoardSidebar";
 import EmployeeCard from "../components/cards/EmployeeCard";
 import GreetingCard from "../components/cards/GreetingCard";
@@ -9,23 +9,64 @@ import ThemeToggleButton from "../components/theme/ThemeToggleButton";
 import Calender from "../components/cards/Calender";
 
 function EmployeeDashboard() {
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [hasShown, setHasShown] = useState(false); // To prevent re-showing
+
+  const handleHover = () => {
+    if (!hasShown) {
+      setShowOverlay(true);
+      setHasShown(true); // So it won't trigger again
+
+      setTimeout(() => {
+        setShowOverlay(false);
+      }, 3000); // Hide after 3 seconds
+    }
+  };
+
   return (
     <Box
+      onMouseEnter={handleHover}
       sx={{
+        position: "relative",
         display: "flex",
         flexDirection: { xs: "column", sm: "row" },
         minHeight: "100vh",
         bgcolor: (theme) => theme.palette.background.default,
         color: (theme) => theme.palette.text.primary,
+        overflow: "hidden",
       }}
     >
+      {/* Overlay */}
+      {showOverlay && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            zIndex: 9999,
+            width: "100%",
+            height: "100%",
+            bgcolor: "rgba(0, 0, 0, 0.7)",
+            color: "#fff",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+            fontSize: "22px",
+            fontWeight: "bold",
+            transition: "opacity 0.3s ease",
+            textAlign: "center",
+          }}
+        >
+          ⚠️ This page is under construction...
+          <Typography variant="body2" mt={1}>
+            Closing in 3 seconds...
+          </Typography>
+        </Box>
+      )}
+
       {/* Sidebar */}
-      <Box
-        sx={{
-          width: { xs: "100%", sm: 240 },
-          flexShrink: 0,
-        }}
-      >
+      <Box sx={{ width: { xs: "100%", sm: 240 }, flexShrink: 0 }}>
         <DashBoardSidebar />
       </Box>
 
@@ -37,10 +78,10 @@ function EmployeeDashboard() {
           </Grid>
           <Grid item xs={12} sm={3} display="flex" justifyContent="flex-end">
             <LogoutComponent />
-            <ThemeToggleButton /> 
+            <ThemeToggleButton />
           </Grid>
-        </Grid> 
-                
+        </Grid>
+
         {/* Summary Cards */}
         <Grid container spacing={2} mt={1}>
           <Grid item xs={12} sm={4}>
@@ -54,13 +95,13 @@ function EmployeeDashboard() {
           </Grid>
         </Grid>
 
-        {/* Charts and Calende*/}
+        {/* Charts and Calendar */}
         <Grid container spacing={2} mt={1}>
           <Grid item xs={12} md={6}>
             <PerformanceChart />
           </Grid>
           <Grid item xs={12} md={6}>
-            <Calender/>
+            <Calender />
           </Grid>
         </Grid>
       </Box>
