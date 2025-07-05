@@ -8,21 +8,28 @@ function Calender() {
   const [value, setValue] = useState(new Date());
 
   return (
-    <Box 
-      display="flex" 
-      justifyContent="center" 
-      sx={{ minHeight: 700,py:2 }} 
+    <Box
+      display="flex"
+      justifyContent="center"
+      sx={{ py: 2 }}
     >
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DateCalendar
           value={value}
           onChange={(newValue) => setValue(newValue)}
           sx={{
+            transform: 'scale(1.01)', 
+            transformOrigin: 'top left',
             borderRadius: 2,
             backgroundColor: 'background.paper',
-            boxShadow: 1,
+            boxShadow: 2,
+            p: 2,
+            minWidth: 360,
             '& .MuiPickersDay-root': {
-              fontWeight: 'bold',
+              width: 42,
+              height: 32,
+            },
+            '& .MuiTypography-root': {
             },
           }}
         />

@@ -8,6 +8,7 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
+  useTheme,
 } from "@mui/material";
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -21,28 +22,33 @@ import AutoAwesomeMotionIcon from "@mui/icons-material/AutoAwesomeMotion";
 import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
 
 const menuItems = [
-  { icon: <DashboardIcon sx={{ color: "#3b82f6" }} />, label: "Home", link: "/pages/dashboard.html" },
-  { icon: <GroupAddIcon sx={{ color: "#f97316" }} />, label: "Leave Tracker", link: "/pages/tables.html" },
-  { icon: <CreditCardIcon sx={{ color: "#10b981" }} />, label: "Attendance", link: "/pages/attendance.html" },
-  { icon: <AppsIcon sx={{ color: "#06b6d4" }} />, label: "Projects", link: "/pages/virtual-reality.html" },
-  { icon: <PublicIcon sx={{ color: "#ef4444" }} />, label: "Payroll", link: "/pages/rtl.html" },
+  { icon: <DashboardIcon />, label: "Home", link: "/pages/dashboard.html" },
+  { icon: <GroupAddIcon />, label: "Leave Tracker", link: "/pages/tables.html" },
+  { icon: <CreditCardIcon />, label: "Attendance", link: "/pages/attendance.html" },
+  { icon: <AppsIcon />, label: "Projects", link: "/pages/virtual-reality.html" },
+  { icon: <PublicIcon />, label: "Payroll", link: "/pages/rtl.html" },
 ];
 
 const accountItems = [
-  { icon: <PersonIcon sx={{ color: "#3b82f6" }} />, label: "Profile", link: "/pages/profile.html" },
-  { icon: <MilitaryTechIcon sx={{ color: "#06b6d4" }} />, label: "Performance", link: "/pages/sign-up.html" },
-  { icon: <AutoAwesomeMotionIcon sx={{ color: "#f97316" }} />, label: "Reports", link: "/pages/sign-in.html" },
-  { icon: <LogoutIcon sx={{ color: "#06b6d4" }} />, label: "Log Out", link: "/pages/sign-up.html" },
+  { icon: <PersonIcon />, label: "Profile", link: "/pages/profile.html" },
+  { icon: <MilitaryTechIcon />, label: "Performance", link: "/pages/sign-up.html" },
+  { icon: <AutoAwesomeMotionIcon />, label: "Reports", link: "/pages/sign-in.html" },
+  { icon: <LogoutIcon />, label: "Log Out", link: "/pages/sign-up.html" },
 ];
 
 const DashBoardSidebar = () => {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
+
   return (
     <Box
       sx={{
-        width: { xs: "100%", sm: 240 },
+        width: { xs: 70, sm: 240 },
         height: "100vh",
-        backgroundColor: "#fff",
-        borderRight: "1px solid #e5e7eb",
+        backgroundColor: isDark ? "#1e1e1e" : "#ffffff",
+        color: isDark ? "#f8fafc" : "#1e293b",
+        borderRight: "1px solid",
+        borderColor: isDark ? "#374151" : "#e5e7eb",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
@@ -58,32 +64,53 @@ const DashBoardSidebar = () => {
         <Typography
           variant="h6"
           fontWeight="bold"
-          sx={{ mb: 2, color: "#1e293b", textAlign: "center" }}
+          sx={{
+            mb: 2,
+            textAlign: "center",
+            display: { xs: "none", sm: "block" },
+            color: isDark ? "#f8fafc" : "#1e293b",
+          }}
         >
           Dashboard
         </Typography>
 
-        <Divider />
+        <Divider sx={{ display: { xs: "none", sm: "block" }, bgcolor: isDark ? "#334155" : "#cbd5e1" }} />
 
         <List>
           {menuItems.map(({ icon, label, link }, idx) => (
             <ListItem disablePadding key={idx}>
               <ListItemButton component="a" href={link}>
-                <ListItemIcon>{icon}</ListItemIcon>
-                <ListItemText primary={label} />
+                <ListItemIcon sx={{ color: isDark ? "#ffffff" : "#1e293b" }}>
+                  {icon}
+                </ListItemIcon>
+                <ListItemText
+                  primary={label}
+                  sx={{
+                    display: { xs: "none", sm: "inline" },
+                    color: isDark ? "#f8fafc" : "#1e293b",
+                  }}
+                />
               </ListItemButton>
             </ListItem>
           ))}
         </List>
 
-        <Divider />
+        <Divider sx={{ display: { xs: "none", sm: "block" }, bgcolor: isDark ? "#334155" : "#cbd5e1" }} />
 
         <List>
           {accountItems.map(({ icon, label, link }, idx) => (
             <ListItem disablePadding key={idx}>
               <ListItemButton component="a" href={link}>
-                <ListItemIcon>{icon}</ListItemIcon>
-                <ListItemText primary={label} />
+                <ListItemIcon sx={{ color: isDark ? "#ffffff" : "#1e293b" }}>
+                  {icon}
+                </ListItemIcon>
+                <ListItemText
+                  primary={label}
+                  sx={{
+                    display: { xs: "none", sm: "inline" },
+                    color: isDark ? "#f8fafc" : "#1e293b",
+                  }}
+                />
               </ListItemButton>
             </ListItem>
           ))}
