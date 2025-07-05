@@ -17,13 +17,20 @@ function GreetingCard({ name = "Employee" }) {
         width: { xs: "100%", sm: "90%" },
       }}
     >
-      <Typography variant="h5" fontWeight={550} gutterBottom>
+      <Typography
+        variant="h5"
+        fontWeight={550}
+        gutterBottom
+        sx={{
+          fontSize: { xs: "1.2rem", sm: "1.5rem" }, // responsive font
+        }}
+      >
         👋 Good morning, {name}
       </Typography>
       <Typography
         variant="body1"
         sx={{
-          fontSize: "1rem",
+          fontSize: { xs: "0.85rem", sm: "1rem" }, // responsive body font
           color: isDark ? "#cbd5e1" : "#475569",
         }}
       >

@@ -45,7 +45,7 @@ const accountItems = [
 ];
 
 const SidebarContent = ({ isDark }) => (
-  <Box >
+  <Box>
     <Typography
       variant="h6"
       fontWeight="bold"
@@ -126,19 +126,31 @@ const DashBoardSidebar = () => {
 
   return (
     <>
+      {/* Top AppBar for Mobile */}
       {isMobile && (
-        <AppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1 }}>
+        <AppBar
+          position="fixed"
+          elevation={1}
+          sx={{
+            zIndex: theme.zIndex.drawer + 1,
+            backgroundColor: "#ffffff",
+            color: "#1e293b",
+            boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+          }}
+        >
           <Toolbar>
-            <IconButton color="inherit" edge="start" onClick={handleDrawerToggle}>
+            <IconButton
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ color: "#1e293b" }}
+            >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap>
-              Echo5 Digital
-            </Typography>
           </Toolbar>
         </AppBar>
       )}
 
+      {/* Navigation Drawer */}
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -161,7 +173,7 @@ const DashBoardSidebar = () => {
           {drawer}
         </Drawer>
 
-        {/* Desktop Permanent Drawer */}
+        {/* Desktop Drawer */}
         <Drawer
           variant="permanent"
           sx={{
