@@ -56,10 +56,8 @@ export default function FullWidthGrid() {
   return (
     <Box sx={{ flexGrow: 1 }} className=" p-2">
       <Grid container spacing={17}>
-        <Grid container size={{ xs: 12, md: 2 }} className="bg-green-700">
-          <Item>
+        <Grid container size={{ xs: 12, md: 2 }} >
             <DashBoardSidebar />
-          </Item>
         </Grid>
         <Grid container spacing={2} size={{ xs: 12, md: 10 }}>
           <Grid container size={{ md: 12 }}>

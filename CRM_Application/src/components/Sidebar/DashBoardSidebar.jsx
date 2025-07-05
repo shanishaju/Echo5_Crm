@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -8,9 +8,15 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
+  Drawer,
+  IconButton,
+  AppBar,
+  Toolbar,
   useTheme,
+  useMediaQuery,
 } from "@mui/material";
 
+import MenuIcon from "@mui/icons-material/Menu";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import AppsIcon from "@mui/icons-material/Apps";
@@ -20,6 +26,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import AutoAwesomeMotionIcon from "@mui/icons-material/AutoAwesomeMotion";
 import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
+
+const drawerWidth = 240;
 
 const menuItems = [
   { icon: <DashboardIcon />, label: "Home", link: "/pages/dashboard.html" },
@@ -36,87 +44,143 @@ const accountItems = [
   { icon: <LogoutIcon />, label: "Log Out", link: "/pages/sign-up.html" },
 ];
 
+const SidebarContent = ({ isDark }) => (
+  <Box >
+    <Typography
+      variant="h6"
+      fontWeight="bold"
+      sx={{
+        mb: 2,
+        textAlign: "center",
+        display: { xs: "none", sm: "block" },
+        color: isDark ? "#f8fafc" : "#1e293b",
+      }}
+    >
+      Dashboard
+    </Typography>
+
+    <Divider sx={{ display: { xs: "none", sm: "block" }, bgcolor: isDark ? "#334155" : "#cbd5e1" }} />
+
+    <List>
+      {menuItems.map(({ icon, label, link }, idx) => (
+        <ListItem disablePadding key={idx}>
+          <ListItemButton component="a" href={link}>
+            <ListItemIcon sx={{ color: isDark ? "#ffffff" : "#1e293b" }}>{icon}</ListItemIcon>
+            <ListItemText
+              primary={label}
+              sx={{
+                display: { xs: "none", sm: "inline" },
+                color: isDark ? "#f8fafc" : "#1e293b",
+              }}
+            />
+          </ListItemButton>
+        </ListItem>
+      ))}
+    </List>
+
+    <Divider sx={{ display: { xs: "none", sm: "block" }, bgcolor: isDark ? "#334155" : "#cbd5e1" }} />
+
+    <List>
+      {accountItems.map(({ icon, label, link }, idx) => (
+        <ListItem disablePadding key={idx}>
+          <ListItemButton component="a" href={link}>
+            <ListItemIcon sx={{ color: isDark ? "#ffffff" : "#1e293b" }}>{icon}</ListItemIcon>
+            <ListItemText
+              primary={label}
+              sx={{
+                display: { xs: "none", sm: "inline" },
+                color: isDark ? "#f8fafc" : "#1e293b",
+              }}
+            />
+          </ListItemButton>
+        </ListItem>
+      ))}
+    </List>
+  </Box>
+);
+
 const DashBoardSidebar = () => {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  return (
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const drawer = (
     <Box
       sx={{
-        width: { xs: 70, sm: 240 },
-        height: "100vh",
+        width: drawerWidth,
+        height: "100%",
         backgroundColor: isDark ? "#1e1e1e" : "#ffffff",
         color: isDark ? "#f8fafc" : "#1e293b",
-        borderRight: "1px solid",
-        borderColor: isDark ? "#374151" : "#e5e7eb",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
         p: 2,
-        position: "sticky",
-        top: 0,
-        overflowY: "auto",
-        borderRadius: { sm: 2, xs: 0 },
-        zIndex: 1000,
       }}
     >
-      <Box>
-        <Typography
-          variant="h6"
-          fontWeight="bold"
+      <SidebarContent isDark={isDark} />
+    </Box>
+  );
+
+  return (
+    <>
+      {isMobile && (
+        <AppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1 }}>
+          <Toolbar>
+            <IconButton color="inherit" edge="start" onClick={handleDrawerToggle}>
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" noWrap>
+              Echo5 Digital
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      )}
+
+      <Box
+        component="nav"
+        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        aria-label="sidebar"
+      >
+        {/* Mobile Drawer */}
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{ keepMounted: true }}
           sx={{
-            mb: 2,
-            textAlign: "center",
-            display: { xs: "none", sm: "block" },
-            color: isDark ? "#f8fafc" : "#1e293b",
+            display: { xs: "block", sm: "none" },
+            "& .MuiDrawer-paper": {
+              width: drawerWidth,
+              boxSizing: "border-box",
+            },
           }}
         >
-          Dashboard
-        </Typography>
+          {drawer}
+        </Drawer>
 
-        <Divider sx={{ display: { xs: "none", sm: "block" }, bgcolor: isDark ? "#334155" : "#cbd5e1" }} />
-
-        <List>
-          {menuItems.map(({ icon, label, link }, idx) => (
-            <ListItem disablePadding key={idx}>
-              <ListItemButton component="a" href={link}>
-                <ListItemIcon sx={{ color: isDark ? "#ffffff" : "#1e293b" }}>
-                  {icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={label}
-                  sx={{
-                    display: { xs: "none", sm: "inline" },
-                    color: isDark ? "#f8fafc" : "#1e293b",
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-
-        <Divider sx={{ display: { xs: "none", sm: "block" }, bgcolor: isDark ? "#334155" : "#cbd5e1" }} />
-
-        <List>
-          {accountItems.map(({ icon, label, link }, idx) => (
-            <ListItem disablePadding key={idx}>
-              <ListItemButton component="a" href={link}>
-                <ListItemIcon sx={{ color: isDark ? "#ffffff" : "#1e293b" }}>
-                  {icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={label}
-                  sx={{
-                    display: { xs: "none", sm: "inline" },
-                    color: isDark ? "#f8fafc" : "#1e293b",
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
+        {/* Desktop Permanent Drawer */}
+        <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: "none", sm: "block" },
+            "& .MuiDrawer-paper": {
+              width: drawerWidth,
+              boxSizing: "border-box",
+              backgroundColor: isDark ? "#1e1e1e" : "#ffffff",
+              color: isDark ? "#f8fafc" : "#1e293b",
+              borderRight: "1px solid",
+              borderColor: isDark ? "#374151" : "#e5e7eb",
+            },
+          }}
+          open
+        >
+          {drawer}
+        </Drawer>
       </Box>
-    </Box>
+    </>
   );
 };
 
