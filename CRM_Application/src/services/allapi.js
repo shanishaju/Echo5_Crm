@@ -9,3 +9,7 @@ return await commonapi('POST',`${serverurl}/register`,reqBody,"")
 export const loginApi = async(reqBody)=>{
     return await commonapi('POST',`${serverurl}/login`,reqBody,"")
 }
+//EmployeeList
+export const EmployeeListApi = async(reqBody)=>{
+    return await commonapi('GET',`${serverurl}/employeelist`,reqBody,"")
+}

@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Paper, useTheme } from "@mui/material";
 
-function GreetingCard({ name = "Employee" }) {
+function GreetingCard() {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
+
+  const [name, setName] = useState("Employee");
+
+  useEffect(() => {
+    const storedName = localStorage.getItem("employeeName");
+    if (storedName) {
+      setName(storedName);
+    }
+  }, []);
 
   return (
     <Paper
@@ -22,7 +31,7 @@ function GreetingCard({ name = "Employee" }) {
         fontWeight={550}
         gutterBottom
         sx={{
-          fontSize: { xs: "1.2rem", sm: "1.5rem" }, // responsive font
+          fontSize: { xs: "1.2rem", sm: "1.5rem" },
         }}
       >
         👋 Good morning, {name}
@@ -30,7 +39,7 @@ function GreetingCard({ name = "Employee" }) {
       <Typography
         variant="body1"
         sx={{
-          fontSize: { xs: "0.85rem", sm: "1rem" }, // responsive body font
+          fontSize: { xs: "0.85rem", sm: "1rem" },
           color: isDark ? "#cbd5e1" : "#475569",
         }}
       >

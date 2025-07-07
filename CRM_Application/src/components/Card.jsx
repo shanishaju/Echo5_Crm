@@ -98,7 +98,7 @@ export default function FullWidthGrid() {
                 value="1/25"
                 percentage="90%"
                 subtitle="left"
-                icon="🛒"
+                icon="👥"
                 iconColor="blue"
               />
             </Grid>

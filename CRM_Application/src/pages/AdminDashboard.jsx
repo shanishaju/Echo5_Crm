@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Grid, Paper, Typography, Divider } from "@mui/material";
+import AdminSidebar from "../components/Sidebar/AdminSidebar";
 
 const dataCards = [
   { title: "Total Users", value: 120 },
@@ -11,7 +12,17 @@ const dataCards = [
 const AdminDashboard = () => {
   return (
     <>
-      <Box sx={{ p: 3, backgroundColor: "#f8f9fb", minHeight: "100vh" }}>
+      <AdminSidebar />
+      <Box
+        sx={{
+          p: 3,
+          
+          backgroundColor: "#f8f9fb",
+          minHeight: "100vh",
+          ml: { sm: "240px" }, // adjust based on drawer width
+          mt: { xs: 7, sm: 0 }, // for mobile AppBar space
+        }}
+      >
         <Typography variant="h4" gutterBottom fontWeight="bold">
           Admin Dashboard
         </Typography>
@@ -32,8 +43,74 @@ const AdminDashboard = () => {
           ))}
         </Grid>
 
-        {/* Recent Leads/Activity */}
+        {/* Recent Leads */}
         <Paper elevation={3} sx={{ p: 3 }}>
+          <Typography variant="h6" fontWeight="bold" gutterBottom>
+            Recent Leads
+          </Typography>
+          <Divider sx={{ mb: 2 }} />
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={4}>
+              <Typography>
+                <strong>Name:</strong> John Doe
+              </Typography>
+              <Typography>
+                <strong>Status:</strong> Contacted
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography>
+                <strong>Name:</strong> Alice Smith
+              </Typography>
+              <Typography>
+                <strong>Status:</strong> Interested
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography>
+                <strong>Name:</strong> Mark Johnson
+              </Typography>
+              <Typography>
+                <strong>Status:</strong> Not Responding
+              </Typography>
+            </Grid>
+          </Grid>
+        </Paper>
+                {/* Recent Leads */}
+        <Paper elevation={3} sx={{ p: 3 }}>
+          <Typography variant="h6" fontWeight="bold" gutterBottom>
+            Recent Leads
+          </Typography>
+          <Divider sx={{ mb: 2 }} />
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={4}>
+              <Typography>
+                <strong>Name:</strong> John Doe
+              </Typography>
+              <Typography>
+                <strong>Status:</strong> Contacted
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography>
+                <strong>Name:</strong> Alice Smith
+              </Typography>
+              <Typography>
+                <strong>Status:</strong> Interested
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography>
+                <strong>Name:</strong> Mark Johnson
+              </Typography>
+              <Typography>
+                <strong>Status:</strong> Not Responding
+              </Typography>
+            </Grid>
+          </Grid>
+        </Paper>
+                {/* Recent Leads */}
+        <Paper elevation={3} sx={{ p: 3 }} spacing={3}>
           <Typography variant="h6" fontWeight="bold" gutterBottom>
             Recent Leads
           </Typography>
