@@ -10,7 +10,7 @@ const employeeSchema = new mongoose.Schema(
     designation: { type: String, required: true },
     doj: { type: String, required: true },
     password: { type: String, required: true },
-    role: { type: String, default: "employee", enum: ["admin", "employee"] }, // ✅ role field
+    role: { type: String, default: "employee", enum: ["admin", "employee"] }, //  role field
   },
   { timestamps: true }
 );
