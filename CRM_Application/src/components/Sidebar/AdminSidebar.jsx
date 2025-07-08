@@ -30,6 +30,7 @@ const drawerWidth = 240;
 
 const adminMenuItems = [
   { icon: <PeopleAltIcon />, label: "Employees", link: "/employees" },
+  {icon: <PersonAddIcon/>,label :"Add Employee", link :'/add-employee'},
   { icon: <DashboardIcon />, label: "Manage Project", link: "/manage-project" },
   { icon: <AssessmentIcon />, label: "Reports", link: "/reports" },
   { icon: <CreditCardIcon />, label: "Attendance", link: "/attendance" },

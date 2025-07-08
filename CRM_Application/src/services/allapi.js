@@ -1,15 +1,18 @@
-import { commonapi } from "./commonapi"
-import { serverurl } from "./serverurl"
+import { commonapi } from "./commonapi";
+import { serverurl } from "./serverurl";
 
+export const registerApi = async (reqBody) => {
+  return await commonapi("POST", `${serverurl}/register`, reqBody, {}); //  force header inclusion
+};
 
-export const registerApi = async(reqBody)=>{
-return await commonapi('POST',`${serverurl}/register`,reqBody,"")
+export const loginApi = async (reqBody) => {
+  return await commonapi("POST", `${serverurl}/login`, reqBody); 
 }
-//login
-export const loginApi = async(reqBody)=>{
-    return await commonapi('POST',`${serverurl}/login`,reqBody,"")
-}
-//EmployeeList
-export const EmployeeListApi = async(reqBody)=>{
-    return await commonapi('GET',`${serverurl}/employeelist`,reqBody,"")
-}
+
+export const EmployeeListApi = async () => {
+  return await commonapi("GET", `${serverurl}/employeelist`, null);
+};
+
+export const AttendanceApi = async (reqBody) => {
+  return await commonapi("POST", `${serverurl}/attendance`, reqBody);
+};

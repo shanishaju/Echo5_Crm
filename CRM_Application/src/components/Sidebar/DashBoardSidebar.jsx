@@ -32,7 +32,7 @@ const drawerWidth = 240;
 const menuItems = [
   { icon: <DashboardIcon />, label: "Home", link: "/pages/dashboard.html" },
   { icon: <GroupAddIcon />, label: "Leave Tracker", link: "/pages/tables.html" },
-  { icon: <CreditCardIcon />, label: "Attendance", link: "/pages/attendance.html" },
+  { icon: <CreditCardIcon />, label: "Attendance", link: "/punchin" },
   { icon: <AppsIcon />, label: "Projects", link: "/pages/virtual-reality.html" },
   { icon: <PublicIcon />, label: "Payroll", link: "/pages/rtl.html" },
 ];

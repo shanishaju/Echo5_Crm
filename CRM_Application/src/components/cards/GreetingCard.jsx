@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Paper, useTheme } from "@mui/material";
+import WavingHandIcon from '@mui/icons-material/WavingHand';
 
 function GreetingCard() {
   const theme = useTheme();
@@ -8,9 +9,16 @@ function GreetingCard() {
   const [name, setName] = useState("Employee");
 
   useEffect(() => {
-    const storedName = localStorage.getItem("employeeName");
-    if (storedName) {
-      setName(storedName);
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        if (user.fullName) {
+          setName(user.fullName);
+        }
+      } catch (error) {
+        console.error("Failed to parse user data:", error);
+      }
     }
   }, []);
 
@@ -34,7 +42,7 @@ function GreetingCard() {
           fontSize: { xs: "1.2rem", sm: "1.5rem" },
         }}
       >
-        👋 Good morning, {name}
+        <WavingHandIcon fontSize="large"/> Good morning, {name}
       </Typography>
       <Typography
         variant="body1"
