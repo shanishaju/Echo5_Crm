@@ -102,50 +102,30 @@ exports.AttendanceController = async (req, res) => {
     const { location, ipAddress } = req.body;
     const user = req.user;
 
-    const companyIP = "116.68.101.245";
-    const companyLocation = {
-      latitude: 9.9844,
-      longitude: 76.3068,
-    };
-
-    const toRadians = (deg) => (deg * Math.PI) / 180;
-    const getDistanceFromLatLonInKm = (loc1, loc2) => {
-      const R = 6371;
-      const dLat = toRadians(loc2.latitude - loc1.latitude);
-      const dLon = toRadians(loc2.longitude - loc1.longitude);
-      const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(toRadians(loc1.latitude)) *
-          Math.cos(toRadians(loc2.latitude)) *
-          Math.sin(dLon / 2) *
-          Math.sin(dLon / 2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      return R * c;
-    };
-
-    const distance = getDistanceFromLatLonInKm(location, companyLocation);
-
-    console.log("📍 Received location:", location);
-    console.log("🏢 Company location:", companyLocation);
-    console.log("📐 Distance:", distance);
-
-    if (ipAddress !== companyIP || distance > 0.5) {
-      return res.status(403).json({
-        message: "Access denied: Outside company premises or wrong IP",
-        distance: `${distance.toFixed(3)} km`,
-      });
-    }
-
-    const newPunch = new attendanceModel({
+    const existing = await attendanceModel.findOne({
       employeeId: user.employeeId,
-      ipAddress,
-      location,
+      punchOut: { $exists: false },
     });
 
-    await newPunch.save();
+    const now = new Date();
 
-    res.status(200).json({ message: "Punch in recorded successfully" });
+    if (existing) {
+      // Punch OUT
+      existing.punchOut = now;
+      await existing.save();
+      return res.status(200).json({ message: "Punched Out", punchIn: existing.punchIn, punchOut: existing.punchOut });
+    } else {
+      // Punch IN
+      const newPunch = new attendanceModel({
+        employeeId: user.employeeId,
+        ipAddress,
+        location,
+        punchIn: now,
+      });
+      await newPunch.save();
+      return res.status(200).json({ message: "Punched In", punchIn: newPunch.punchIn });
+    }
   } catch (err) {
-    res.status(500).json({ message: "Failed to punch in", error: err.message });
+    res.status(500).json({ message: "Failed to punch", error: err.message });
   }
 };
