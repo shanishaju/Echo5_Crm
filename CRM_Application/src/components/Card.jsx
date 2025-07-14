@@ -11,6 +11,9 @@ import { Card, CardContent, Typography } from "@mui/material";
 import Calender from "./cards/Calender";
 import PerformanceChart from "./charts/PerformanceChart";
 import TimingChart from "./charts/TimingChart";
+import PunchClock from "../components/punchin/PunchClock";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: "#fff",
@@ -22,6 +25,7 @@ const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: "#1A2027",
   }),
 }));
+
 const EmployeeCard = ({
   title,
   value,
@@ -53,11 +57,19 @@ const EmployeeCard = ({
 );
 
 export default function FullWidthGrid() {
+  const navigate = useNavigate();
+  
+const handleLogout = () => {
+  sessionStorage.clear();
+  localStorage.clear();
+  toast.success("Logged out successfully!");
+  navigate("/"); // redirect to login page
+};
   return (
     <Box sx={{ flexGrow: 1 }} className=" p-2">
       <Grid container spacing={17}>
-        <Grid container size={{ xs: 12, md: 2 }} >
-            <DashBoardSidebar />
+        <Grid container size={{ xs: 12, md: 2 }}>
+          <DashBoardSidebar />
         </Grid>
         <Grid container spacing={2} size={{ xs: 12, md: 10 }}>
           <Grid container size={{ md: 12 }}>
@@ -68,19 +80,20 @@ export default function FullWidthGrid() {
               <ThemeToggleButton />
             </Grid>
             <Grid container size={{ md: 1, sm: 4 }}>
-              <LogoutComponent />
+              <LogoutComponent onLogout={handleLogout} />
             </Grid>
           </Grid>
           <Grid container size={{ md: 12 }} className=" ">
             <Grid container size={{ sm: 12, md: 4 }} className="h-70 w-100 ">
-              <EmployeeCard
+              {/* <EmployeeCard
                 title="Test Employee"
                 value="Platform Engineer"
                 percentage="+3%"
                 subtitle="since last week"
                 icon="👥"
                 iconColor="purple"
-              />
+              /> */}
+              <PunchClock />
             </Grid>
             <Grid container size={{ sm: 12, md: 4 }} className=" h-70 w-100 ">
               <EmployeeCard
@@ -105,7 +118,7 @@ export default function FullWidthGrid() {
           </Grid>
           <Grid container size={{ md: 12 }}>
             <Grid container size={{ md: 4, sm: 12 }}>
-              <Calender />
+              {/* <Calender /> */}
             </Grid>
 
             <Grid

@@ -7,6 +7,7 @@ import LogoutComponent from "../components/loginout/LogoutComponent";
 import ThemeToggleButton from "../components/theme/ThemeToggleButton";
 import PerformanceChart from "../components/charts/PerformanceChart";
 import Calender from "../components/cards/Calender";
+import Attendance from "../components/admin/Attendance";
 
 const EmployeeCard = ({ title, value, percentage, subtitle, icon, iconColor }) => (
   <Card sx={{ height: "100%", boxShadow: 3, borderRadius: 2 }}>
@@ -103,14 +104,15 @@ function EmployeeDashboard() {
         {/* Cards Row */}
         <Grid container spacing={2} mt={1}>
           <Grid item xs={12} md={4}>
-            <EmployeeCard
+            {/* <EmployeeCard
               title="Test Employee"
               value="Platform Engineer"
               percentage="+3%"
               subtitle="since last week"
               icon="👥"
               iconColor="purple"
-            />
+            /> */}
+            {/* <Attendance/> */}
           </Grid>
           <Grid item xs={12} md={4}>
             <EmployeeCard
@@ -137,7 +139,7 @@ function EmployeeDashboard() {
         {/* Charts and Calendar */}
         <Grid container spacing={2} mt={1}>
           <Grid item xs={12} md={6}>
-            <PerformanceChart />
+            {/* <PerformanceChart /> */}
           </Grid>
           <Grid item xs={12} md={6}>
             <Calender />

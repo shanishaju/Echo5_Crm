@@ -16,7 +16,7 @@ function LogoutComponent({ onLogout }) {
           backgroundColor: isDark ? "#1f2937" : "#ffffff",
           color: isDark ? "#f8fafc" : "#1e293b",
           fontFamily: "Inter, sans-serif",
-          borderRadius: 2,
+          borderRadius: 10,
           px: 2,
           py: 1,
           boxShadow: 1,
@@ -25,7 +25,6 @@ function LogoutComponent({ onLogout }) {
           },
         }}
       >
-        
       </Button>
     </Box>
   );

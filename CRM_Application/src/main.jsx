@@ -4,10 +4,15 @@ import "./index.css";
 import App from "./App.jsx";
 import ThemeContextProvider from "./components/theme/ThemeContextProvider.jsx";
 
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"; 
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <ThemeContextProvider>
-      <App />
-    </ThemeContextProvider>
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <ThemeContextProvider>
+        <App />
+      </ThemeContextProvider>
+    </LocalizationProvider>
   </StrictMode>
 );

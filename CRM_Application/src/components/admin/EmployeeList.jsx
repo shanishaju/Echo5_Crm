@@ -6,25 +6,36 @@ import {
   Box,
   Button,
   CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { EmployeeListApi } from "../../services/allapi";
+import AdminSidebar from "../Sidebar/AdminSidebar";
+import {
+  EmployeeListApi,
+  DeleteEmployeeApi,
+  EditEmployeeApi,
+  UpdateEmployeeApi,
+} from "../../services/allapi";
 import { toast } from "sonner";
-import AdminSidebar from "../Sidebar/AdminSidebar"; // Assuming you have this
 
 function EmployeeList() {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [editOpen, setEditOpen] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   // Fetch employee data
   const fetchEmployees = async () => {
     try {
       const response = await EmployeeListApi();
       if (response.status === 200) {
-
         setEmployees(response.data);
-        console.log(response)
       } else {
         toast.error("Failed to fetch employees");
       }
@@ -39,21 +50,61 @@ function EmployeeList() {
     fetchEmployees();
   }, []);
 
-  const handleEdit = (id) => {
-    console.log("Edit employee with ID:", id);
+  // Delete
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this employee?")) {
+      try {
+        const response = await DeleteEmployeeApi(id);
+        if (response.status === 200) {
+          toast.success("Employee deleted successfully");
+          fetchEmployees();
+        } else {
+          toast.error("Failed to delete employee");
+        }
+      } catch (error) {
+        toast.error("Error deleting employee");
+      }
+    }
   };
 
-  const handleDelete = (id) => {
-    console.log("Delete employee with ID:", id);
+  // Edit
+  const handleEdit = async (id) => {
+    try {
+      const response = await EditEmployeeApi(id);
+      if (response.status === 200) {
+        setSelectedEmployee(response.data);
+        setEditOpen(true);
+      } else {
+        toast.error("Failed to fetch employee data");
+      }
+    } catch (error) {
+      toast.error("Error loading employee details");
+    }
+  };
+
+  const handleEditSubmit = async () => {
+    try {
+      const response = await UpdateEmployeeApi(
+        selectedEmployee._id,
+        selectedEmployee
+      );
+      if (response.status === 200) {
+        toast.success("Employee updated successfully");
+        setEditOpen(false);
+        fetchEmployees();
+      } else {
+        toast.error("Failed to update employee");
+      }
+    } catch (error) {
+      toast.error("Error updating employee");
+    }
   };
 
   return (
     <Box sx={{ display: "flex" }}>
       <AdminSidebar />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        
-
-        {/*  Welcome/Stats Card */}
+        {/* Welcome Card */}
         <Paper
           elevation={4}
           sx={{
@@ -70,9 +121,14 @@ function EmployeeList() {
           <Typography>Total Employees: {employees.length}</Typography>
         </Paper>
 
-        {/*  Employee Cards */}
+        {/* Employee Cards */}
         {loading ? (
-          <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            minHeight="200px"
+          >
             <CircularProgress />
           </Box>
         ) : (
@@ -83,19 +139,28 @@ function EmployeeList() {
                   <Paper
                     elevation={3}
                     sx={{
+                      height: "280px",
+                      minHeight: 280,
+                      width: "280px",
+                      minWidth: 280,
                       p: 3,
-                      borderRadius: 2,
+                      borderRadius: 1,
                       bgcolor: "#fefefe",
-                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
                     }}
                   >
-                    <Typography variant="h6" fontWeight={600}>
-                      {employee.fullName}
-                    </Typography>
-                    <Typography>Email: {employee.email}</Typography>
-                    <Typography>Employee Id: {employee.employeeId}</Typography>
-                    <Typography>Department: {employee.department}</Typography>
-                    <Typography>Designation: {employee.designation}</Typography>
+                    <Box>
+                      <Typography variant="h6" fontWeight={600}>
+                        {employee.fullName}
+                      </Typography>
+                      <Typography>Email: {employee.email}</Typography>
+                      <Typography>Employee Id: {employee.employeeId}</Typography>
+                      <Typography>Department: {employee.department}</Typography>
+                      <Typography>Designation: {employee.designation}</Typography>
+                      <Typography>Role: {employee.role}</Typography>
+                    </Box>
 
                     <Box mt={2} display="flex" gap={1}>
                       <Button
@@ -125,6 +190,88 @@ function EmployeeList() {
           </Grid>
         )}
       </Box>
+
+      {/* Edit Employee Dialog */}
+      <Dialog
+        open={editOpen}
+        onClose={() => setEditOpen(false)}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>Edit Employee</DialogTitle>
+        <DialogContent dividers>
+          {selectedEmployee && (
+            <Box
+              component="form"
+              sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}
+            >
+              <TextField
+                label="Full Name"
+                value={selectedEmployee.fullName}
+                onChange={(e) =>
+                  setSelectedEmployee({
+                    ...selectedEmployee,
+                    fullName: e.target.value,
+                  })
+                }
+                fullWidth
+              />
+              <TextField
+                label="Email"
+                value={selectedEmployee.email}
+                onChange={(e) =>
+                  setSelectedEmployee({
+                    ...selectedEmployee,
+                    email: e.target.value,
+                  })
+                }
+                fullWidth
+              />
+              <TextField
+                label="Department"
+                value={selectedEmployee.department}
+                onChange={(e) =>
+                  setSelectedEmployee({
+                    ...selectedEmployee,
+                    department: e.target.value,
+                  })
+                }
+                fullWidth
+              />
+              <TextField
+                label="Designation"
+                value={selectedEmployee.designation}
+                onChange={(e) =>
+                  setSelectedEmployee({
+                    ...selectedEmployee,
+                    designation: e.target.value,
+                  })
+                }
+                fullWidth
+              />
+              <TextField
+                label="Role"
+                value={selectedEmployee.role}
+                onChange={(e) =>
+                  setSelectedEmployee({
+                    ...selectedEmployee,
+                    role: e.target.value,
+                  })
+                }
+                fullWidth
+              />
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEditOpen(false)} color="inherit">
+            Cancel
+          </Button>
+          <Button variant="contained" onClick={handleEditSubmit}>
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

@@ -66,12 +66,14 @@ function TimingChart() {
     <Paper
       elevation={3}
       sx={{
-        borderRadius: 3,
+        borderRadius: 2,
         p: 2,
-        mt: 2,
+        width: 450,
+        display: "flex",
+        flexDirection: "column",
+        position: "relative",
         background: "linear-gradient(to bottom, #3b82f6, #60a5fa)",
         color: "#fff",
-        Width: 700, // Same as PerformanceChart
         height: 300, // Same height
       }}
     >
@@ -79,7 +81,8 @@ function TimingChart() {
         Total Time Worked
       </Typography>
       <Typography variant="body2" sx={{ color: "#e0e0e0", mb: 2 }}>
-        <span style={{ color: "#22c55e", fontWeight: 600 }}>▲ Log times</span> over the week
+        <span style={{ color: "#22c55e", fontWeight: 600 }}>▲ Log times</span>{" "}
+        over the week
       </Typography>
       <Box sx={{ height: 150 }}>
         <Bar data={data} options={options} />

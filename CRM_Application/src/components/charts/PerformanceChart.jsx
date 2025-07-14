@@ -11,7 +11,14 @@ import {
   Legend,
 } from "chart.js";
 
-ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend);
+ChartJS.register(
+  LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  Tooltip,
+  Legend
+);
 
 const data = {
   labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
@@ -53,20 +60,25 @@ function PerformanceChart() {
     <Paper
       elevation={3}
       sx={{
-        borderRadius: 3,
+        borderRadius: 2,
         p: 2,
-        mt:2,
+        width: 450,
+        display: "flex",
+        flexDirection: "column",
+        position: "relative",
+
         background: "linear-gradient(to bottom, #2c2c2c, #1e1e1e)",
         color: "#fff",
-        Width: 700, //  Control width
-        height: 300,     //  Control height
+        height: 300, //  Control height
       }}
     >
+
       <Typography variant="body1" fontWeight={600} sx={{ mb: 1 }}>
         Monthly Performance Overview
       </Typography>
       <Typography variant="body2" sx={{ color: "#d1d5db", mb: 2 }}>
-        <span style={{ color: "#22c55e", fontWeight: 600 }}>▲ 4%</span> improvement over the past 6 months
+        <span style={{ color: "#22c55e", fontWeight: 600 }}>▲ 4%</span>{" "}
+        improvement over the past 6 months
       </Typography>
       <Box sx={{ height: 150 }}>
         <Line data={data} options={options} />

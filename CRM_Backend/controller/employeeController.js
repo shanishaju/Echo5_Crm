@@ -1,8 +1,8 @@
 const Employee = require("../models/employeeModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const attendanceModel = require("../models/attendanceModel");
 // const Attendance = require("../models/attendanceModel");
+
 
 // Register
 exports.registerEmployeeController = async (req, res) => {
@@ -95,37 +95,54 @@ exports.getAllEmployeeController = async (req, res) => {
   }
 };
 
-//attendance controller
-
-exports.AttendanceController = async (req, res) => {
+// Delete Employee
+exports.deleteEmployeeController = async (req, res) => {
   try {
-    const { location, ipAddress } = req.body;
-    const user = req.user;
+    const { id } = req.params;
 
-    const existing = await attendanceModel.findOne({
-      employeeId: user.employeeId,
-      punchOut: { $exists: false },
-    });
+    const deleted = await Employee.findByIdAndDelete(id);
 
-    const now = new Date();
-
-    if (existing) {
-      // Punch OUT
-      existing.punchOut = now;
-      await existing.save();
-      return res.status(200).json({ message: "Punched Out", punchIn: existing.punchIn, punchOut: existing.punchOut });
-    } else {
-      // Punch IN
-      const newPunch = new attendanceModel({
-        employeeId: user.employeeId,
-        ipAddress,
-        location,
-        punchIn: now,
-      });
-      await newPunch.save();
-      return res.status(200).json({ message: "Punched In", punchIn: newPunch.punchIn });
+    if (!deleted) {
+      return res.status(404).json({ message: "Employee not found" });
     }
-  } catch (err) {
-    res.status(500).json({ message: "Failed to punch", error: err.message });
+
+    res.status(200).json({ message: "Employee deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+// Edit Employee 
+exports.editEmployeeController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const employee = await Employee.findById(id);
+
+    if (!employee) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+
+    res.status(200).json(employee);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+// Update Employee
+exports.updateEmployeeController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedData = req.body;
+
+    const updated = await Employee.findByIdAndUpdate(id, updatedData, { new: true });
+
+    if (!updated) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+
+    res.status(200).json({ message: "Employee updated successfully", updated });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+

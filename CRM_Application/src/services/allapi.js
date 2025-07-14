@@ -16,3 +16,22 @@ export const EmployeeListApi = async () => {
 export const AttendanceApi = async (reqBody) => {
   return await commonapi("POST", `${serverurl}/attendance`, reqBody);
 };
+export const GetAllAttendanceApi = async (dateStr) => {
+  return await commonapi("GET", `${serverurl}/all-attendance?date=${dateStr}`, null);
+};
+
+export const GetMyAttandanceApi = async (dateStr) => {
+  return await commonapi("GET", `${serverurl}/my-attendance?date=${dateStr}`, null);
+};
+
+export const DeleteEmployeeApi = async (id) => {
+  return await commonapi("DELETE", `${serverurl}/delete-employee/${id}`);
+};
+
+export const EditEmployeeApi = async (id) => {
+  return await commonapi("GET", `${serverurl}/edit-employee/${id}`);
+};
+
+export const UpdateEmployeeApi = async (id, updatedData) => {
+  return await commonapi("PUT", `${serverurl}/update-employee/${id}`, updatedData);
+};

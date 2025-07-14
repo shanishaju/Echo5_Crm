@@ -12,6 +12,7 @@ function EmployeeCard({ title, value, percentage, subtitle, icon, iconColor }) {
         display: "flex",
         flexDirection: "column",
         backgroundColor: "#fff",
+
       }}
     >
       {/* Icon */}

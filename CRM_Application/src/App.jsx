@@ -11,6 +11,8 @@ import EmployeeList from "./components/admin/EmployeeList";
 import Unauthorized from "./pages/Unauthorized";
 import ProtectedAdminRoute from "./pages/ProtectedAdminRoute";
 import PunchClock from "./components/punchin/PunchClock";
+import Attendance from "./components/admin/Attendance";
+import AttendanceSummary from "./components/AttendanceSummary";
 
 function App() {
   return (
@@ -52,6 +54,10 @@ function App() {
         <Route path="/testing-path" element={<LeaveApplication />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path='/punchin' element={<PunchClock/>} />
+        <Route path='/attendance' element={<Attendance/>}/>
+        <Route path='/my-attendance' element={<AttendanceSummary/>}/>
+
+
       </Routes>
     </Router>
   );

@@ -3,10 +3,12 @@ import {
   Box,
   Button,
   Paper,
+  IconButton,
   Typography,
   Divider,
-  useTheme,
 } from "@mui/material";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import SettingsIcon from "@mui/icons-material/Settings";
 import RoomIcon from "@mui/icons-material/Room";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
@@ -15,7 +17,6 @@ import axios from "axios";
 import { AttendanceApi } from "../../services/allapi";
 
 const PunchClock = () => {
-  const theme = useTheme();
   const [time, setTime] = useState("00:00:00");
   const [ipAddress, setIpAddress] = useState("Fetching...");
   const [location, setLocation] = useState(null);
@@ -50,96 +51,102 @@ const PunchClock = () => {
       .then((res) => setIpAddress(res.data.ip))
       .catch(() => setIpAddress("Unavailable"));
   }, []);
-    console.log(ipAddress)
-const handlePunchIn = async () => {
-  const response = await AttendanceApi({ ipAddress });
 
-  if (response?.status === 200) {
-    setPunchedInAt(response.data?.punchIn || new Date().toISOString());
-    setPunchedOutAt(null);
-    setWorkingTime("");
-    toast.success("Punched In Successfully!");
-  } else {
-    toast.error(response?.response?.data?.message || "Punch In Failed");
-  }
-};
+  const handlePunchIn = async () => {
+    if (!location) return toast.error("Please fetch location first.");
 
-const handlePunchOut = async () => {
-  const response = await AttendanceApi({ ipAddress });
+    const [lat, lon] = location
+      .replace("Lat: ", "")
+      .replace("Lon: ", "")
+      .split(", ")
+      .map((val) => parseFloat(val));
 
-  if (response?.status === 200) {
-    const { punchOut, punchIn, workedTime } = response.data;
-    setPunchedOutAt(punchOut);
-    setPunchedInAt(punchIn);
-    setWorkingTime(workedTime);
-    toast.success("Punched Out Successfully!");
-  } else {
-    toast.error("Punch Out Failed");
-  }
-};
+    const reqBody = {
+      location: { latitude: lat, longitude: lon },
+      ipAddress,
+    };
 
+    const response = await AttendanceApi(reqBody);
+
+    if (response?.status === 200) {
+      setPunchedInAt(response.data?.punchIn || new Date().toISOString());
+      setPunchedOutAt(null);
+      setWorkingTime("");
+      toast.success("Punched In Successfully!");
+    } else {
+      const errMsg = response?.response?.data?.message || "Punch In Failed";
+      toast.error(errMsg);
+    }
+  };
+
+  const handlePunchOut = async () => {
+    const reqBody = {
+      location: null,
+      ipAddress,
+    };
+
+    const response = await AttendanceApi(reqBody);
+
+    if (response?.status === 200) {
+      const { punchOut, punchIn, workedTime } = response.data;
+      setPunchedOutAt(punchOut);
+      setPunchedInAt(punchIn);
+      setWorkingTime(workedTime);
+      toast.success("Punched Out Successfully!");
+    } else {
+      toast.error("Punch Out Failed");
+    }
+  };
 
   const handleCheckLocation = () => {
-    if (!navigator.geolocation) {
-      toast.error("Geolocation not supported.");
-      return;
-    }
-
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords;
-        setLocation({ latitude, longitude });
+      (position) => {
+        const loc = `Lat: ${position.coords.latitude.toFixed(
+          4
+        )}, Lon: ${position.coords.longitude.toFixed(4)}`;
+        setLocation(loc);
         toast.success("Location fetched!");
       },
-      (err) => {
-        switch (err.code) {
-          case 1:
-            toast.error("Permission denied.");
-            break;
-          case 2:
-            toast.error("Location unavailable.");
-            break;
-          case 3:
-            toast.error("Request timed out.");
-            break;
-          default:
-            toast.error("Geolocation error.");
-        }
-      },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      () => toast.error("Location access denied.")
     );
   };
 
   return (
-    <Paper
+<Paper
       elevation={3}
       sx={{
         borderRadius: 2,
         p: 2,
-        width: 450,
-        minHeight: 350, 
+        width: 450, 
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between",
-        transition: "min-height 0.3s ease-in-out",
+        backgroundColor: "#fff",
       }}
     >
-      {/* Time and Button */}
+      <IconButton sx={{ position: "absolute", top: 16, right: 16 }}>
+        <SettingsIcon color="action" />
+      </IconButton>
+      {/* 
+      <Typography variant="h5" fontWeight="bold" mb={1}>
+        ⏱️ Punch Clock
+      </Typography> */}
+
+      {/* Live Clock */}
       <Box
         display="flex"
         alignItems="center"
         justifyContent="space-between"
         mb={3}
         p={2}
-        borderRadius={2}
-        sx={{
-          backgroundColor:
-            theme.palette.mode === "dark" ? "#475569" : "#f0f4f8",
-        }}
+        borderRadius={3}
+        sx={{ backgroundColor: "#f7f9fc" }}
       >
-        <Typography variant="h6" fontWeight={600}>
-          {time}
-        </Typography>
+        <Box display="flex" alignItems="center" gap={1}>
+          {/* <AccessTimeIcon color="primary" /> */}
+          <Typography variant="h6" fontWeight={600}>
+            {time}
+          </Typography>
+        </Box>
 
         {punchedInAt && !punchedOutAt ? (
           <Button
@@ -169,27 +176,22 @@ const handlePunchOut = async () => {
         )}
       </Box>
 
-      {/* Location Button */}
+      {/* Location Section */}
       <Button
         onClick={handleCheckLocation}
         variant="outlined"
         fullWidth
-        sx={{
-          borderRadius: 25,
-          textTransform: "none",
-        }}
+        sx={{ borderRadius: 25, textTransform: "none" }}
       >
         📍 Check My Current Location
       </Button>
 
-      {/* Location display */}
       {location && (
         <Typography
           mt={2}
           fontSize="0.85rem"
           sx={{
-            backgroundColor:
-              theme.palette.mode === "dark" ? "#64748b" : "#e3f2fd",
+            backgroundColor: "#e3f2fd",
             p: 1,
             borderRadius: 2,
             display: "flex",
@@ -198,15 +200,13 @@ const handlePunchOut = async () => {
             fontWeight: 500,
           }}
         >
-          <RoomIcon fontSize="small" color="primary" />
-          Lat: {location.latitude.toFixed(4)}, Lon:{" "}
-          {location.longitude.toFixed(4)}
+          <RoomIcon fontSize="small" color="primary" /> {location}
         </Typography>
       )}
 
       <Divider sx={{ my: 3 }} />
 
-      {/* Info */}
+      {/* Punch Info */}
       {punchedInAt && (
         <Typography fontSize="0.9rem" gutterBottom>
           🕒 <strong>Punched In:</strong> {formatToIST(punchedInAt)}
