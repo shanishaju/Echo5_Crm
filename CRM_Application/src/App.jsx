@@ -13,6 +13,7 @@ import ProtectedAdminRoute from "./pages/ProtectedAdminRoute";
 import PunchClock from "./components/punchin/PunchClock";
 import Attendance from "./components/admin/Attendance";
 import AttendanceSummary from "./components/AttendanceSummary";
+import AdminLeaveManagement from "./components/admin/AdminLeaveManagement";
 
 function App() {
   return (
@@ -47,6 +48,15 @@ function App() {
             </ProtectedAdminRoute>
           }
         />
+          <Route
+          path="/Manage-Leave"
+          element={
+            <ProtectedAdminRoute>
+              <AdminLeaveManagement/>
+            </ProtectedAdminRoute>
+          }
+        />
+
 
         {/* Normal routes */}
         <Route path="/dashboard" element={<Card />} />

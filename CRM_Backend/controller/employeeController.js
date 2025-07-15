@@ -63,7 +63,7 @@ exports.loginEmployeeController = async (req, res) => {
     const token = jwt.sign(
       { employeeId: employee._id, role: employee.role },
       process.env.JWT_SECRET,
-      { expiresIn: "2h" }
+      { expiresIn: "1d" }
     );
 
     res.status(200).json({

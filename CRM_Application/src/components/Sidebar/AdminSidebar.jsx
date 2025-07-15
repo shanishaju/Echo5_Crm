@@ -37,7 +37,7 @@ const adminMenuItems = [
   {
     icon: <AssignmentTurnedInIcon />,
     label: "Leave Management",
-    link: "/leave",
+    link: "/Manage-Leave",
   },
   { icon: <PaidIcon />, label: "Payroll", link: "/payroll" },
   { icon: <AssessmentIcon />, label: "Reports", link: "/reports" },

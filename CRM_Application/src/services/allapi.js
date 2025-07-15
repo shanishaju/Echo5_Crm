@@ -35,3 +35,15 @@ export const EditEmployeeApi = async (id) => {
 export const UpdateEmployeeApi = async (id, updatedData) => {
   return await commonapi("PUT", `${serverurl}/update-employee/${id}`, updatedData);
 };
+
+export const SubmitLeaveApplicationApi = async (data) => {
+  return await commonapi("POST", `${serverurl}/leave-applications`, data);
+};
+
+export const getAllLeavesApi = async () => {
+  return await commonapi("GET", `${serverurl}/admin/leave-requests`);
+};
+
+export const updateLeaveStatusApi = async (id, data) => {
+  return await commonapi("PATCH", `${serverurl}/admin/leave-requests/${id}`, data);
+};
