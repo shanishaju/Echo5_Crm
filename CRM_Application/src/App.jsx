@@ -51,11 +51,13 @@ function App() {
         {/* Normal routes */}
         <Route path="/dashboard" element={<Card />} />
         <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/testing-path" element={<LeaveApplication />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path='/punchin' element={<PunchClock/>} />
         <Route path='/attendance' element={<Attendance/>}/>
         <Route path='/my-attendance' element={<AttendanceSummary/>}/>
+        <Route path="/apply-leave" element={<LeaveApplication />} />
+
+
 
 
       </Routes>
