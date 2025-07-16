@@ -30,7 +30,9 @@ const drawerWidth = 240;
 
 const adminMenuItems = [
   { icon: <PeopleAltIcon />, label: "Employees", link: "/employees" },
-  {icon: <PersonAddIcon/>,label :"Add Employee", link :'/add-employee'},
+  { icon: <PersonAddIcon />, label: "Add Employee", link: "/add-employee" },
+  { icon: <AssessmentIcon />, label: "Add Admin", link: "/add-admin" },
+
   { icon: <DashboardIcon />, label: "Manage Project", link: "/manage-project" },
   { icon: <AssessmentIcon />, label: "Reports", link: "/reports" },
   { icon: <CreditCardIcon />, label: "Attendance", link: "/attendance" },
@@ -40,7 +42,6 @@ const adminMenuItems = [
     link: "/Manage-Leave",
   },
   { icon: <PaidIcon />, label: "Payroll", link: "/payroll" },
-  { icon: <AssessmentIcon />, label: "Reports", link: "/reports" },
   { icon: <LogoutIcon />, label: "Logout", link: "/logout" },
 ];
 

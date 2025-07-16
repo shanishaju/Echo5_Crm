@@ -6,7 +6,6 @@ const attendanceSchema = new mongoose.Schema({
     ref: "Employee",
     required: true,
   },
-
   ipAddress: {
     type: String,
     required: true,

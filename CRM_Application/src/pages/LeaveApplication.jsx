@@ -82,7 +82,7 @@ const LeaveApplication = () => {
         endDate: data.endDate ? data.endDate.toISOString() : null,
       };
 
-const response = await SubmitLeaveApplicationApi(payload);
+      const response = await SubmitLeaveApplicationApi(payload);
       console.log("Leave Submitted:", response.data);
       toast.success("Leave request submitted successfully!"); //      success toast
       reset();
@@ -164,144 +164,164 @@ const response = await SubmitLeaveApplicationApi(payload);
         </Box>
 
         {/* Leave Request Section */}
-        <Paper elevation={3} sx={{ p: 4, borderRadius: 2, maxWidth: "800px" }}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Grid container spacing={3}>
-              <Grid size={12}>
-                <Typography variant="h6" fontWeight={600} gutterBottom>
-                  📌 Leave Request
-                </Typography>
-              </Grid>
-
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <Grid size={4}>
-                  <Controller
-                    name="startDate"
-                    control={control}
-                    rules={{ required: "Start date is required" }}
-                    render={({ field }) => (
-                      <DatePicker
-                        label="Start Date"
-                        {...field}
-                        format="DD-MM-YYYY"
-                        slotProps={{
-                          textField: {
-                            fullWidth: true,
-                            error: !!errors.startDate,
-                            helperText: errors.startDate?.message,
-                          },
-                        }}
-                      />
-                    )}
-                  />
+        <Box display="flex" gap={2} flexWrap="wrap">
+          <Paper
+            elevation={3}
+            sx={{ p: 4, borderRadius: 2, maxWidth: "800px" }}
+          >
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <Grid container spacing={3}>
+                <Grid size={12}>
+                  <Typography variant="h6" fontWeight={600} gutterBottom>
+                    📌 Leave Request
+                  </Typography>
                 </Grid>
 
-                <Grid size={4}>
-                  <Controller
-                    name="endDate"
-                    control={control}
-                    rules={{ required: "End date is required" }}
-                    render={({ field }) => (
-                      <DatePicker
-                        label="End Date"
-                        {...field}
-                        format="DD-MM-YYYY"
-                        slotProps={{
-                          textField: {
-                            fullWidth: true,
-                            error: !!errors.endDate,
-                            helperText: errors.endDate?.message,
-                          },
-                        }}
-                      />
-                    )}
-                  />
-                </Grid>
-              </LocalizationProvider>
-
-              <Grid size={4}>
-                <TextField
-                  label="Total Days"
-                  value={getDaysDiff()}
-                  fullWidth
-                  disabled
-                />
-              </Grid>
-
-              <Grid size={12}>
-                <Controller
-                  name="leaveType"
-                  control={control}
-                  rules={{ required: "Please select a leave type" }}
-                  render={({ field }) => (
-                    <FormControl fullWidth error={!!errors.leaveType}>
-                      <InputLabel>Leave Type</InputLabel>
-                      <Select {...field} label="Leave Type">
-                        <MenuItem value="PTO">Paid Time Off (PTO)</MenuItem>
-                        <MenuItem value="Sick">Sick Leave</MenuItem>
-                        <MenuItem value="Other">Other</MenuItem>
-                      </Select>
-                    </FormControl>
-                  )}
-                />
-              </Grid>
-
-              <Grid size={12}>
-                <Controller
-                  name="reason"
-                  control={control}
-                  rules={{ required: "Reason is required" }}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label="Comment (Reason)"
-                      multiline
-                      rows={4}
-                      fullWidth
-                      placeholder="Type reason of leave"
-                      error={!!errors.reason}
-                      helperText={errors.reason?.message}
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Grid size={4}>
+                    <Controller
+                      name="startDate"
+                      control={control}
+                      rules={{ required: "Start date is required" }}
+                      render={({ field }) => (
+                        <DatePicker
+                          label="Start Date"
+                          {...field}
+                          format="DD-MM-YYYY"
+                          slotProps={{
+                            textField: {
+                              fullWidth: true,
+                              error: !!errors.startDate,
+                              helperText: errors.startDate?.message,
+                            },
+                          }}
+                        />
+                      )}
                     />
-                  )}
-                />
-              </Grid>
+                  </Grid>
 
-              <Grid size={6}>
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  flexWrap="wrap"
-                >
-                  <Button
-                    type="button"
-                    variant="text"
-                    onClick={() => reset()}
-                    sx={{
-                      backgroundColor: "#5567ff",
-                      color: "#fff",
-                      textTransform: "none",
-                      px: 4,
-                    }}
+                  <Grid size={4}>
+                    <Controller
+                      name="endDate"
+                      control={control}
+                      rules={{ required: "End date is required" }}
+                      render={({ field }) => (
+                        <DatePicker
+                          label="End Date"
+                          {...field}
+                          format="DD-MM-YYYY"
+                          slotProps={{
+                            textField: {
+                              fullWidth: true,
+                              error: !!errors.endDate,
+                              helperText: errors.endDate?.message,
+                            },
+                          }}
+                        />
+                      )}
+                    />
+                  </Grid>
+                </LocalizationProvider>
+
+                <Grid size={4}>
+                  <TextField
+                    label="Total Days"
+                    value={getDaysDiff()}
+                    fullWidth
+                    disabled
+                  />
+                </Grid>
+
+                <Grid size={12}>
+                  <Controller
+                    name="leaveType"
+                    control={control}
+                    rules={{ required: "Please select a leave type" }}
+                    render={({ field }) => (
+                      <FormControl fullWidth error={!!errors.leaveType}>
+                        <InputLabel>Leave Type</InputLabel>
+                        <Select {...field} label="Leave Type">
+                          <MenuItem value="PTO">Paid Time Off (PTO)</MenuItem>
+                          <MenuItem value="Sick">Sick Leave</MenuItem>
+                          <MenuItem value="Other">Other</MenuItem>
+                        </Select>
+                      </FormControl>
+                    )}
+                  />
+                </Grid>
+
+                <Grid size={12}>
+                  <Controller
+                    name="reason"
+                    control={control}
+                    rules={{ required: "Reason is required" }}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        label="Comment (Reason)"
+                        multiline
+                        rows={4}
+                        fullWidth
+                        placeholder="Type reason of leave"
+                        error={!!errors.reason}
+                        helperText={errors.reason?.message}
+                      />
+                    )}
+                  />
+                </Grid>
+
+                <Grid size={6}>
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    flexWrap="wrap"
                   >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    sx={{
-                      backgroundColor: "#5567ff",
-                      color: "#fff",
-                      textTransform: "none",
-                      px: 4,
-                    }}
-                  >
-                    Send request
-                  </Button>
-                </Box>
+                    <Button
+                      type="button"
+                      variant="text"
+                      onClick={() => reset()}
+                      sx={{
+                        backgroundColor: "#5567ff",
+                        color: "#fff",
+                        textTransform: "none",
+                        px: 4,
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{
+                        backgroundColor: "#5567ff",
+                        color: "#fff",
+                        textTransform: "none",
+                        px: 4,
+                      }}
+                    >
+                      Send request
+                    </Button>
+                  </Box>
+                </Grid>
               </Grid>
-            </Grid>
-          </form>
-        </Paper>
+            </form>
+          </Paper>
+          {/* my all status  need here code*/}
+          <Paper
+            elevation={3}
+            sx={{ p: 4, borderRadius: 2, width: "400px", minWidth: "250px" }}
+          >
+            <Typography variant="h6" fontWeight={600} gutterBottom>
+              📊 Leave Summary
+            </Typography>
+            <Typography>
+              name
+            </Typography>
+
+            
+            {/* You can add charts, stats, or anything here */}
+          </Paper>
+        </Box>
       </Box>
     </Box>
   );

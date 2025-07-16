@@ -1,6 +1,7 @@
 // controller/leaveController.js
 const LeaveRequest = require("../models/leaveModel");
 const Employee = require("../models/employeeModel");
+const Notification = require("../models/notificationModel");
 
 exports.leaveApplicationController = async (req, res) => {
   try {
@@ -21,7 +22,17 @@ exports.leaveApplicationController = async (req, res) => {
     });
 
     await newLeave.save();
-    res.status(201).json({ message: "Leave applied successfully", leave: newLeave });
+
+    //`notification for admin
+    await Notification.create({
+      type: "LeaveRequest",
+      message: `${employeeExists.fullName} applied for leave from ${startDate} to ${endDate}.`,
+      isRead: false,
+    });
+
+    res
+      .status(201)
+      .json({ message: "Leave applied successfully", leave: newLeave });
   } catch (error) {
     console.error("Leave apply error:", error);
     res.status(500).json({ message: "Server error", error: error.message });

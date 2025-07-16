@@ -30,7 +30,7 @@ import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
 const drawerWidth = 240;
 
 const menuItems = [
-  { icon: <DashboardIcon />, label: "Home", link: "/pages/dashboard.html" },
+  { icon: <DashboardIcon />, label: "Home", link: "/dashboard" },
   { icon: <GroupAddIcon />, label: "Leave Tracker", link: "/apply-leave" },
   { icon: <CreditCardIcon />, label: "Attendance", link: "/my-attendance" },
   { icon: <AppsIcon />, label: "Projects", link: "/pages/virtual-reality.html" },
@@ -191,6 +191,7 @@ const DashBoardSidebar = () => {
         >
           {drawer}
         </Drawer>
+
       </Box>
     </>
   );

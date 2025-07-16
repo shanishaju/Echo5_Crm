@@ -22,6 +22,7 @@ import dayjs from "dayjs";
 
 import { getAllLeavesApi, updateLeaveStatusApi } from "../../services/allapi";
 import AdminSidebar from "../Sidebar/AdminSidebar";
+import AdminHeader from "./AdminHeader";
 
 const AdminLeaveManagement = () => {
   const [leaves, setLeaves] = useState([]);
@@ -59,6 +60,11 @@ const AdminLeaveManagement = () => {
   });
 
   return (
+<>
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+  <Typography variant="h6">Admin Dashboard</Typography>
+  <AdminHeader/>
+</Box>
     <Box sx={{ display: "flex" }}>
       <AdminSidebar />
 
@@ -181,6 +187,7 @@ const AdminLeaveManagement = () => {
         </Paper>
       </Box>
     </Box>
+</>
   );
 };
 
