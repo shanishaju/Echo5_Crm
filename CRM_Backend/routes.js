@@ -5,7 +5,7 @@ const { AttendanceController, GetAttendanceSummaryController, GetMyAttendanceSum
 
 const verifyToken = require("./middleware/JwtMiddleware");
 const checkRole = require("./middleware/checkRole");
-const { leaveApplicationController, getAllLeaveRequestsController, updateLeaveStatusController } = require("./controller/leaveController");
+const { leaveApplicationController, getAllLeaveRequestsController, updateLeaveStatusController, getEmployeeLeaveRequestsController } = require("./controller/leaveController");
 const { getNotifications } = require("./controller/notificationController");
 
 const router = new express.Router();
@@ -29,6 +29,9 @@ router.get('/edit-employee/:id', editEmployeeController);
 router.put('/update-employee/:id', updateEmployeeController);
 
 router.post("/leave-applications", verifyToken, leaveApplicationController);
+
+router.get("/my-leave-requests", verifyToken, getEmployeeLeaveRequestsController);
+
 
 router.get("/admin/leave-requests", verifyToken, checkRole("admin"),getAllLeaveRequestsController );
 router.patch("/admin/leave-requests/:id", verifyToken, checkRole("admin"),updateLeaveStatusController );

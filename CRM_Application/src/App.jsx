@@ -14,6 +14,7 @@ import PunchClock from "./components/punchin/PunchClock";
 import Attendance from "./components/admin/Attendance";
 import AttendanceSummary from "./components/AttendanceSummary";
 import AdminLeaveManagement from "./components/admin/AdminLeaveManagement";
+import UnderConstruction from "./components/cards/UnderConstruction";
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
-        
+
         {/*  Admin-only routes */}
         <Route
           path="/register"
@@ -48,26 +49,24 @@ function App() {
             </ProtectedAdminRoute>
           }
         />
-          <Route
+        <Route
           path="/Manage-Leave"
           element={
             <ProtectedAdminRoute>
-              <AdminLeaveManagement/>
+              <AdminLeaveManagement />
             </ProtectedAdminRoute>
           }
         />
-
 
         {/* Normal routes */}
         <Route path="/dashboard" element={<Card />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
-        <Route path='/punchin' element={<PunchClock/>} />
-        <Route path='/attendance' element={<Attendance/>}/>
-        <Route path='/my-attendance' element={<AttendanceSummary/>}/>
+        <Route path="/punchin" element={<PunchClock />} />
+        <Route path="/attendance" element={<Attendance />} />
+        <Route path="/my-attendance" element={<AttendanceSummary />} />
         <Route path="/apply-leave" element={<LeaveApplication />} />
-
-
+        <Route path="/maintenance" element={<UnderConstruction/>} />
 
 
       </Routes>

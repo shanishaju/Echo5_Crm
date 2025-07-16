@@ -11,6 +11,15 @@ import {
   FormControl,
   Button,
 } from "@mui/material";
+import {
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Avatar,
+  Chip,
+} from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
@@ -314,11 +323,7 @@ const LeaveApplication = () => {
             <Typography variant="h6" fontWeight={600} gutterBottom>
               📊 Leave Summary
             </Typography>
-            <Typography>
-              name
-            </Typography>
 
-            
             {/* You can add charts, stats, or anything here */}
           </Paper>
         </Box>

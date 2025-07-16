@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import image from  '../assets/Echo404.gif'
 
 const Unauthorized = () => {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ const Unauthorized = () => {
       {/* 403 GIF */}
       <Box
         component="img"
-        src="../"
+        src={image}
         alt="403 Forbidden Eye"
         sx={{
           width: { xs: "220px", sm: "300px" },

@@ -73,3 +73,20 @@ exports.updateLeaveStatusController = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+// EmployeeleaveController
+
+exports.getEmployeeLeaveRequestsController = async (req, res) => {
+  try {
+    const employeeId = req.user.employeeId;
+
+    const leaves = await LeaveRequest.find({ employee: employeeId })
+      .sort({ createdAt: -1 });
+
+    res.status(200).json(leaves);
+  } catch (error) {
+    console.error("Error fetching employee leaves:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+

@@ -47,4 +47,7 @@ export const getAllLeavesApi = async () => {
 export const updateLeaveStatusApi = async (id, data) => {
   return await commonapi("PATCH", `${serverurl}/admin/leave-requests/${id}`, data);
 };
+export const getMyLeavesApi = async () => {
+  return await commonapi("GET", `${serverurl}/my-leave-requests`, null);
+};
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -9,16 +9,22 @@ import {
   Paper,
   FormControlLabel,
   Checkbox,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  IconButton,
 } from "@mui/material";
-import RocketIcon from "@mui/icons-material/Rocket";
+import CloseIcon from "@mui/icons-material/Close";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { loginApi } from "../services/allapi";
 import { toast } from "sonner";
-import logoImage from '../assets/D4.jpg'
+import logoImage from "../assets/D4.jpg";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [openTerms, setOpenTerms] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -35,6 +41,8 @@ const Login = () => {
         localStorage.setItem("user", JSON.stringify(employee));
         localStorage.setItem("username", JSON.stringify(employee.fullName));
         localStorage.setItem("Id", employee.id);
+
+        localStorage.s
 
         toast.success("Login successful!");
 
@@ -89,12 +97,6 @@ const Login = () => {
             >
               <img src={logoImage} alt="" />
             </Avatar>
-            <Typography
-              variant="h6"
-              sx={{ color: "#fff", fontWeight: "bold", mt: 1 }}
-            >
-              
-            </Typography>
           </Box>
 
           {/* Form Section */}
@@ -128,21 +130,40 @@ const Login = () => {
                 sx={{ mb: 3 }}
               />
 
+              {/* Terms & Conditions checkbox */}
               <FormControlLabel
-                control={<Checkbox defaultChecked />}
+                control={
+                  <Checkbox
+                    {...register("terms", {
+                      required: "You must accept the Terms and Conditions",
+                    })}
+                  />
+                }
                 label={
                   <Typography variant="body2" color="text.secondary">
-                    Remember me & accept{" "}
-                    <a href="#" style={{ color: "#1e90ff" }}>
-                      Terms
+                    I accept the{" "}
+                    <a
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setOpenTerms(true);
+                      }}
+                      style={{ color: "#1e90ff", cursor: "pointer" }}
+                    >
+                      Terms and Conditions
                     </a>
                   </Typography>
                 }
-                sx={{ mb: 3, display: "block" }}
+                sx={{ mb: 1, display: "block" }}
               />
-              
-              <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
-                <Button      
+              {errors.terms && (
+                <Typography variant="caption" color="error">
+                  {errors.terms.message}
+                </Typography>
+              )}
+
+              <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
+                <Button
                   type="submit"
                   variant="contained"
                   fullWidth
@@ -158,29 +179,60 @@ const Login = () => {
                 >
                   {isSubmitting ? "Logging in..." : "Login"}
                 </Button>
-
-                <Button
-                  variant="outlined"
-                  fullWidth
-                  onClick={() => navigate("/register")}
-                  sx={{
-                    textTransform: "none",
-                    fontWeight: "bold",
-                    borderColor: "#1e90ff",
-                    color: "#1e90ff",
-                    "&:hover": {
-                      borderColor: "#177ad6",
-                      color: "#177ad6",
-                    },
-                  }}
-                >
-                  Sign Up
-                </Button>
               </Box>
             </form>
           </Box>
         </Paper>
       </Container>
+
+      {/* Terms & Conditions Dialog */}
+      <Dialog
+        open={openTerms}
+        onClose={() => setOpenTerms(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle
+          sx={{
+            m: 0,
+            p: 2,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            borderBottom: "1px solid #e0e0e0",
+          }}
+        >
+          <Typography variant="h4" sx={{ alignItems: "center" }}>
+            Terms & Conditions
+          </Typography>
+          <IconButton
+            aria-label="close"
+            onClick={() => setOpenTerms(false)}
+            sx={{ color: (theme) => theme.palette.grey[600] }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers sx={{ px: 3, py: 2 }}>
+          <Typography variant="body1" gutterBottom>
+            Welcome to our application! By logging in, you agree to our terms
+            and conditions.
+            <br />
+            <br />
+            • You are responsible for maintaining the confidentiality of your
+            account.
+            <br />
+            • Unauthorized access is prohibited.
+            <br />
+            • We do not share your data without consent.
+            <br />
+            • The app reserves the right to suspend access in case of misuse.
+            <br />
+            <br />
+            Thank you for using our platform responsibly.
+          </Typography>
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };

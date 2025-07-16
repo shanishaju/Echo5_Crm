@@ -19,8 +19,8 @@ const PunchClock = () => {
   const [time, setTime] = useState("00:00:00");
   const [ipAddress, setIpAddress] = useState("Fetching...");
   const [location, setLocation] = useState(null);
-  const [punchedInAt, setPunchedInAt] = useState(null);
-  const [punchedOutAt, setPunchedOutAt] = useState(null);
+  // const [punchedInAt, setPunchedInAt] = useState(null);
+  // const [punchedOutAt, setPunchedOutAt] = useState(null);
   const [workingTime, setWorkingTime] = useState("");
 
   const formatToIST = (utcTime) => {
@@ -34,6 +34,10 @@ const PunchClock = () => {
       year: "numeric",
     });
   };
+
+  const punchedInAt = JSON.parse(localStorage.getItem("punchedInAt"))
+  const punchedOutAt = JSON.parse(localStorage.getItem("punchedOutAt"))
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -55,8 +59,10 @@ const handlePunchIn = async () => {
   const response = await AttendanceApi({ ipAddress });
 
   if (response?.status === 200) {
-    setPunchedInAt(response.data?.punchIn || new Date().toISOString());
-    setPunchedOutAt(null);
+    // setPunchedInAt(response.data?.punchIn || new Date().toISOString());
+    localStorage.setItem("punchedInAt",JSON.stringify(response.data?.punchIn || new Date().toISOString()))
+    // setPunchedOutAt(null);
+    localStorage.setItem("punchedOutAt",null)
     setWorkingTime("");
     toast.success("Punched In Successfully!");
   } else {
@@ -69,8 +75,10 @@ const handlePunchOut = async () => {
 
   if (response?.status === 200) {
     const { punchOut, punchIn, workedTime } = response.data;
-    setPunchedOutAt(punchOut);
-    setPunchedInAt(punchIn);
+    // setPunchedOutAt(punchOut);
+    localStorage.setItem("punchedOutAt",JSON.stringify(punchOut || null))
+    // setPunchedInAt(punchIn);
+    localStorage.setItem("punchedInAt",JSON.stringify(punchIn || null))
     setWorkingTime(workedTime);
     toast.success("Punched Out Successfully!");
   } else {

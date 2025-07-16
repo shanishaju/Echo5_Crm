@@ -33,15 +33,15 @@ const menuItems = [
   { icon: <DashboardIcon />, label: "Home", link: "/dashboard" },
   { icon: <GroupAddIcon />, label: "Leave Tracker", link: "/apply-leave" },
   { icon: <CreditCardIcon />, label: "Attendance", link: "/my-attendance" },
-  { icon: <AppsIcon />, label: "Projects", link: "/pages/virtual-reality.html" },
-  { icon: <PublicIcon />, label: "Payroll", link: "/pages/rtl.html" },
+  { icon: <AppsIcon />, label: "Projects", link: "/maintenance" },
+  { icon: <PublicIcon />, label: "Payroll", link: "/maintenance" },
 ];
 
 const accountItems = [
-  { icon: <PersonIcon />, label: "Profile", link: "/pages/profile.html" },
-  { icon: <MilitaryTechIcon />, label: "Performance", link: "/pages/sign-up.html" },
-  { icon: <AutoAwesomeMotionIcon />, label: "Reports", link: "/pages/sign-in.html" },
-  { icon: <LogoutIcon />, label: "Log Out", link: "/pages/sign-up.html" },
+  { icon: <PersonIcon />, label: "Profile", link: "/maintenance" },
+  { icon: <MilitaryTechIcon />, label: "Performance", link: "/maintenance" },
+  { icon: <AutoAwesomeMotionIcon />, label: "Reports", link: "/maintenance" },
+  { icon: <LogoutIcon />, label: "Log Out", link: "/maintenance" },
 ];
 
 const SidebarContent = ({ isDark }) => (
