@@ -58,13 +58,13 @@ const EmployeeCard = ({
 
 export default function FullWidthGrid() {
   const navigate = useNavigate();
-  
-const handleLogout = () => {
-  sessionStorage.clear();
-  localStorage.clear();
-  toast.success("Logged out successfully!");
-  navigate("/"); // redirect to login page
-};
+
+  const handleLogout = () => {
+    sessionStorage.clear();
+    localStorage.clear();
+    toast.success("Logged out successfully!");
+    navigate("/"); // redirect to login page
+  };
   return (
     <Box sx={{ flexGrow: 1 }} className=" p-2">
       <Grid container spacing={17}>
@@ -103,17 +103,11 @@ const handleLogout = () => {
                 subtitle="since last quarter"
                 icon="🧑‍💼"
                 iconColor="green"
+                
               />
             </Grid>
             <Grid container size={{ sm: 12, md: 4 }} className=" h-70 w-100 ">
-              <EmployeeCard
-                title="Balance Leaves"
-                value="1/25"
-                percentage="90%"
-                subtitle="left"
-                icon="👥"
-                iconColor="blue"
-              />
+              <Calender />
             </Grid>
           </Grid>
           <Grid container size={{ md: 12 }}>
@@ -121,21 +115,21 @@ const handleLogout = () => {
               {/* <Calender /> */}
             </Grid>
 
-            <Grid
-              size={{ md: 4, sm: 12 }}
+            {/* <Grid
+              size={{ md: 4, sm: 12, }}
               display="flex"
               justifyContent="center"
             >
               <PerformanceChart />
-            </Grid>
-            <Grid
+            </Grid> */}
+            {/* <Grid
               container
               size={{ md: 4, sm: 12 }}
               display="flex"
               justifyContent="center"
             >
               <TimingChart />
-            </Grid>
+            </Grid> */}
           </Grid>
         </Grid>
       </Grid>

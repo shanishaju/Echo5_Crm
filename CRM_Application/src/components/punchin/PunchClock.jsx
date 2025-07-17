@@ -35,9 +35,8 @@ const PunchClock = () => {
     });
   };
 
-  const punchedInAt = JSON.parse(localStorage.getItem("punchedInAt"))
-  const punchedOutAt = JSON.parse(localStorage.getItem("punchedOutAt"))
-
+  const punchedInAt = JSON.parse(localStorage.getItem("punchedInAt"));
+  const punchedOutAt = JSON.parse(localStorage.getItem("punchedOutAt"));
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -54,38 +53,40 @@ const PunchClock = () => {
       .then((res) => setIpAddress(res.data.ip))
       .catch(() => setIpAddress("Unavailable"));
   }, []);
-    console.log(ipAddress)
-const handlePunchIn = async () => {
-  const response = await AttendanceApi({ ipAddress });
+  console.log(ipAddress);
+  const handlePunchIn = async () => {
+    const response = await AttendanceApi({ ipAddress });
 
-  if (response?.status === 200) {
-    // setPunchedInAt(response.data?.punchIn || new Date().toISOString());
-    localStorage.setItem("punchedInAt",JSON.stringify(response.data?.punchIn || new Date().toISOString()))
-    // setPunchedOutAt(null);
-    localStorage.setItem("punchedOutAt",null)
-    setWorkingTime("");
-    toast.success("Punched In Successfully!");
-  } else {
-    toast.error(response?.response?.data?.message || "Punch In Failed");
-  }
-};
+    if (response?.status === 200) {
+      // setPunchedInAt(response.data?.punchIn || new Date().toISOString());
+      localStorage.setItem(
+        "punchedInAt",
+        JSON.stringify(response.data?.punchIn || new Date().toISOString())
+      );
+      // setPunchedOutAt(null);
+      localStorage.setItem("punchedOutAt", null);
+      setWorkingTime("");
+      toast.success("Punched In Successfully!");
+    } else {
+      toast.error(response?.response?.data?.message || "Punch In Failed");
+    }
+  };
 
-const handlePunchOut = async () => {
-  const response = await AttendanceApi({ ipAddress });
+  const handlePunchOut = async () => {
+    const response = await AttendanceApi({ ipAddress });
 
-  if (response?.status === 200) {
-    const { punchOut, punchIn, workedTime } = response.data;
-    // setPunchedOutAt(punchOut);
-    localStorage.setItem("punchedOutAt",JSON.stringify(punchOut || null))
-    // setPunchedInAt(punchIn);
-    localStorage.setItem("punchedInAt",JSON.stringify(punchIn || null))
-    setWorkingTime(workedTime);
-    toast.success("Punched Out Successfully!");
-  } else {
-    toast.error("Punch Out Failed");
-  }
-};
-
+    if (response?.status === 200) {
+      const { punchOut, punchIn, workedTime } = response.data;
+      // setPunchedOutAt(punchOut);
+      localStorage.setItem("punchedOutAt", JSON.stringify(punchOut || null));
+      // setPunchedInAt(punchIn);
+      localStorage.setItem("punchedInAt", JSON.stringify(punchIn || null));
+      setWorkingTime(workedTime);
+      toast.success("Punched Out Successfully!");
+    } else {
+      toast.error("Punch Out Failed");
+    }
+  };
 
   const handleCheckLocation = () => {
     if (!navigator.geolocation) {
@@ -125,7 +126,7 @@ const handlePunchOut = async () => {
         borderRadius: 2,
         p: 2,
         width: 450,
-        minHeight: 350, 
+        minHeight: 350,
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",

@@ -32,9 +32,10 @@ router.post("/leave-applications", verifyToken, leaveApplicationController);
 
 router.get("/my-leave-requests", verifyToken, getEmployeeLeaveRequestsController);
 
-
 router.get("/admin/leave-requests", verifyToken, checkRole("admin"),getAllLeaveRequestsController );
+
 router.patch("/admin/leave-requests/:id", verifyToken, checkRole("admin"),updateLeaveStatusController );
+
 router.get("/notifications", getNotifications);
 
 module.exports = router;

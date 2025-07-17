@@ -21,8 +21,9 @@ const isWithinAllowedDistance = (lat1, lon1, lat2, lon2, maxDistance = 300) => {
 };
 
 //  authorized office static IPs 
-// const ALLOWED_IPS = ["116.68.101.245"];   
-const ALLOWED_IPS = ["42.105.158.27"];
+// const ALLOWED_IPS = ["42.105.158.27"];
+const ALLOWED_IPS = ["116.68.101.245"];   
+
 exports.AttendanceController = async (req, res) => {
   try {
     const { ipAddress } = req.body;
