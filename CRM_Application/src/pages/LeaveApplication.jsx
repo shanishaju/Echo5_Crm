@@ -191,12 +191,21 @@ const LeaveApplication = () => {
                     <Controller
                       name="startDate"
                       control={control}
-                      rules={{ required: "Start date is required" }}
+                      rules={{ 
+                        required: "Start date is required",
+                        validate: (value) => {
+                          if (value && dayjs(value).isBefore(dayjs(), 'day')) {
+                            return "Start date cannot be in the past";
+                          }
+                          return true;
+                        }
+                      }}
                       render={({ field }) => (
                         <DatePicker
                           label="Start Date"
                           {...field}
                           format="DD-MM-YYYY"
+                          minDate={dayjs()}
                           slotProps={{
                             textField: {
                               fullWidth: true,
@@ -213,12 +222,24 @@ const LeaveApplication = () => {
                     <Controller
                       name="endDate"
                       control={control}
-                      rules={{ required: "End date is required" }}
+                      rules={{ 
+                        required: "End date is required",
+                        validate: (value) => {
+                          if (value && dayjs(value).isBefore(dayjs(), 'day')) {
+                            return "End date cannot be in the past";
+                          }
+                          if (value && startDate && dayjs(value).isBefore(dayjs(startDate), 'day')) {
+                            return "End date cannot be before start date";
+                          }
+                          return true;
+                        }
+                      }}
                       render={({ field }) => (
                         <DatePicker
                           label="End Date"
                           {...field}
                           format="DD-MM-YYYY"
+                          minDate={startDate ? dayjs(startDate) : dayjs()}
                           slotProps={{
                             textField: {
                               fullWidth: true,
