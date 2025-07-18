@@ -79,7 +79,7 @@ exports.loginEmployeeController = async (req, res) => {
       },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
-    );
+    );  
 
     res.status(200).json({
       message: "Login successful",

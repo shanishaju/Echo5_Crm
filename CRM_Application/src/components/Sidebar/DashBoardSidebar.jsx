@@ -26,6 +26,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import AutoAwesomeMotionIcon from "@mui/icons-material/AutoAwesomeMotion";
 import MilitaryTechIcon from "@mui/icons-material/MilitaryTech";
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const drawerWidth = 240;
 
@@ -42,6 +43,8 @@ const accountItems = [
   { icon: <MilitaryTechIcon />, label: "Performance", link: "/maintenance" },
   { icon: <AutoAwesomeMotionIcon />, label: "Reports", link: "/maintenance" },
   { icon: <LogoutIcon />, label: "Log Out", link: "/maintenance" },
+  { icon: <SettingsIcon />, label: "Settings", link: "/profile-settings" },
+
 ];
 
 const SidebarContent = ({ isDark }) => (
