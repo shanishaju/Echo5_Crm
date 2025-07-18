@@ -273,6 +273,11 @@ const Register = () => {
         </Paper>
       </Container>
     </Box>
+
+
+
+
+
   );
 };
 
