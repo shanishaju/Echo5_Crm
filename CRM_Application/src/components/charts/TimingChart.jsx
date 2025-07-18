@@ -74,7 +74,8 @@ function TimingChart() {
         position: "relative",
         background: "linear-gradient(to bottom, #3b82f6, #60a5fa)",
         color: "#fff",
-        height: 300, // Same height
+        height: 420, // Same height
+        justifyContent: "center",
       }}
     >
       <Typography variant="body1" fontWeight={600} sx={{ mb: 1 }}>
@@ -84,7 +85,7 @@ function TimingChart() {
         <span style={{ color: "#22c55e", fontWeight: 600 }}>▲ Log times</span>{" "}
         over the week
       </Typography>
-      <Box sx={{ height: 150 }}>
+      <Box sx={{ height: 300}}>
         <Bar data={data} options={options} />
       </Box>
     </Paper>
