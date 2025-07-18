@@ -163,4 +163,55 @@ exports.updateEmployeeController = async (req, res) => {
   }
 };
 
+// Change Password
+exports.changePasswordController = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const employeeId = req.user.employeeId; // From JWT middleware
+
+    // Validate required fields
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: "Current password and new password are required" });
+    }
+
+    // Basic password strength validation
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: "New password must be at least 6 characters long" });
+    }
+
+    // Find the employee
+    const employee = await Employee.findById(employeeId);
+    if (!employee) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+
+    // Verify current password
+    const isCurrentPasswordValid = await bcrypt.compare(currentPassword, employee.password);
+    if (!isCurrentPasswordValid) {
+      console.log(`Failed password change attempt for employee ${employee.email} - incorrect current password`);
+      return res.status(401).json({ message: "Current password is incorrect" });
+    }
+
+    // Check if new password is different from current password
+    const isSamePassword = await bcrypt.compare(newPassword, employee.password);
+    if (isSamePassword) {
+      return res.status(400).json({ message: "New password must be different from current password" });
+    }
+
+    // Hash the new password
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the password
+    await Employee.findByIdAndUpdate(employeeId, { password: hashedNewPassword });
+
+    // Log successful password change
+    console.log(`Password successfully changed for employee ${employee.email} at ${new Date().toISOString()}`);
+
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.error("Password change error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
 
