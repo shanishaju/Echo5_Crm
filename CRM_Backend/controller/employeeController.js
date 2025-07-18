@@ -48,7 +48,10 @@ exports.registerEmployeeController = async (req, res) => {
 // Login
 exports.loginEmployeeController = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, workLocation, ipAddress } = req.body;
+
+    // Define office IP addresses (you can modify these as needed)
+    const OFFICE_IPS = [ "116.68.101.245"];
 
     const employee = await Employee.findOne({ email });
     if (!employee) {
@@ -60,8 +63,20 @@ exports.loginEmployeeController = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
+    // Validate office work location
+    if (workLocation === "Office" && !OFFICE_IPS.includes(ipAddress)) {
+      return res.status(403).json({ 
+        message: "Office work location is only allowed from office network. Please select 'Hybrid' or connect from office network." 
+      });
+    }
+
     const token = jwt.sign(
-      { employeeId: employee._id, role: employee.role },
+      { 
+        employeeId: employee._id, 
+        role: employee.role,
+        workLocation: workLocation,
+        loginIP: ipAddress
+      },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
@@ -74,6 +89,8 @@ exports.loginEmployeeController = async (req, res) => {
         fullName: employee.fullName,
         role: employee.role,
       },
+      workLocation: workLocation,
+      ipAddress: ipAddress
     });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });

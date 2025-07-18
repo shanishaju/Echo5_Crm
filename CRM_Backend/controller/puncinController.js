@@ -21,19 +21,32 @@ const isWithinAllowedDistance = (lat1, lon1, lat2, lon2, maxDistance = 300) => {
 };
 
 //  authorized office static IPs 
-// const ALLOWED_IPS = ["42.105.158.27"];
 const ALLOWED_IPS = ["116.68.101.245"];   
-
+// const ALLOWED_IPS = ["42.105.158.27"];
 exports.AttendanceController = async (req, res) => {
   try {
-    const { ipAddress } = req.body;
+    const { ipAddress, workLocation } = req.body;
     const user = req.user;
     const now = new Date();
 
-    // Check IP access
-    if (!ipAddress || !ALLOWED_IPS.includes(ipAddress)) {
-      return res.status(403).json({
-        message: "Access denied. You are not on an authorized office network.",
+    // Define office IP addresses (should match with frontend and login)
+    const OFFICE_IPS = [
+      "116.68.101.245" // Example office IP
+    ];
+
+    // Check work location and IP validation
+    if (workLocation === "Office") {
+      if (!ipAddress || !OFFICE_IPS.includes(ipAddress)) {
+        return res.status(403).json({
+          message: "Office mode punch in/out is only allowed from office network. Please connect to office network or switch to Hybrid mode.",
+        });
+      }
+    }
+
+    // For Hybrid mode, allow any IP but still log it
+    if (!ipAddress) {
+      return res.status(400).json({
+        message: "IP address is required for attendance tracking.",
       });
     }
 
@@ -66,6 +79,7 @@ exports.AttendanceController = async (req, res) => {
     const newPunch = new attendanceModel({
       employeeId: user.employeeId,
       ipAddress,
+      workLocation: workLocation || "Hybrid",
       punchIn: now,
     });
 
@@ -74,6 +88,7 @@ exports.AttendanceController = async (req, res) => {
     return res.status(200).json({
       message: "Punched In",
       punchIn: newPunch.punchIn,
+      workLocation: newPunch.workLocation,
     });
   } catch (err) {
     console.error("Punch Error:", err.message);

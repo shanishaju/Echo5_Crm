@@ -50,4 +50,3 @@ export const updateLeaveStatusApi = async (id, data) => {
 export const getMyLeavesApi = async () => {
   return await commonapi("GET", `${serverurl}/my-leave-requests`, null);
 };
-

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -13,38 +13,87 @@ import {
   DialogTitle,
   DialogContent,
   IconButton,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { loginApi } from "../services/allapi";
 import { toast } from "sonner";
 import logoImage from "../assets/D4.jpg";
+import axios from "axios";
+import { OFFICE_IPS, WORK_LOCATIONS, isOfficeIP } from "../config/officeConfig";
 
 const Login = () => {
   const navigate = useNavigate();
   const [openTerms, setOpenTerms] = useState(false);
+  const [ipAddress, setIpAddress] = useState("");
 
   const {
     register,
     handleSubmit,
+    control,
+    watch,
     formState: { errors, isSubmitting },
-  } = useForm({ mode: "onChange" });
+  } = useForm({ 
+    mode: "onChange",
+    defaultValues: {
+      email: "",
+      password: "",
+      workLocation: "",
+      terms: false
+    }
+  });
+
+  const workLocation = watch("workLocation");
+
+  // Get user's IP address on component mount
+  useEffect(() => {
+    const fetchIP = async () => {
+      try {
+        const response = await axios.get("https://api.ipify.org?format=json");
+        setIpAddress(response.data.ip);
+      } catch (error) {
+        console.error("Failed to fetch IP:", error);
+        setIpAddress("Unavailable");
+      }
+    };
+    fetchIP();
+  }, []);
 
   const onSubmit = async (data) => {
     try {
-      const response = await loginApi(data);
+      // Check if user selected "Office" work location
+      if (data.workLocation === WORK_LOCATIONS.OFFICE) {
+        // Validate if current IP is in the office IP list
+        if (!isOfficeIP(ipAddress)) {
+          toast.error("Office work location is only allowed from office network. Please select 'Hybrid' or connect from office network.");
+          return;
+        }
+      }
+
+      // Include work location and IP in the login request
+      const loginData = {
+        ...data,
+        workLocation: data.workLocation,
+        ipAddress: ipAddress
+      };
+
+      const response = await loginApi(loginData);
       if (response?.status === 200 && response.data.token) {
         const { token, employee } = response.data;
 
         sessionStorage.setItem("token", token);
+        sessionStorage.setItem("workLocation", data.workLocation);
+        sessionStorage.setItem("loginIP", ipAddress);
         localStorage.setItem("user", JSON.stringify(employee));
         localStorage.setItem("username", JSON.stringify(employee.fullName));
         localStorage.setItem("Id", employee.id);
 
-        localStorage.s
-
-        toast.success("Login successful!");
+        toast.success(`Login successful! Work location: ${data.workLocation}`);
 
         if (employee.role === "admin") {
           navigate("/admin");
@@ -129,6 +178,56 @@ const Login = () => {
                 helperText={errors.password?.message}
                 sx={{ mb: 3 }}
               />
+
+              {/* Work Location Dropdown */}
+              <FormControl fullWidth variant="standard" sx={{ mb: 3 }}>
+                <InputLabel>Work Location *</InputLabel>
+                <Controller
+                  name="workLocation"
+                  control={control}
+                  rules={{ required: "Work location is required" }}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      error={Boolean(errors.workLocation)}
+                    >
+                      <MenuItem value={WORK_LOCATIONS.OFFICE}>Office</MenuItem>
+                      <MenuItem value={WORK_LOCATIONS.HYBRID}>Hybrid</MenuItem>
+                    </Select>
+                  )}
+                />
+                {errors.workLocation && (
+                  <Typography variant="caption" color="error" sx={{ mt: 0.5 }}>
+                    {errors.workLocation.message}
+                  </Typography>
+                )}
+              </FormControl>
+
+              {/* IP Address Display */}
+              {workLocation === WORK_LOCATIONS.OFFICE && (
+                <Box 
+                  sx={{ 
+                    mb: 2, 
+                    p: 1, 
+                    backgroundColor: "#f5f5f5", 
+                    borderRadius: 1,
+                    border: isOfficeIP(ipAddress) ? "1px solid #4caf50" : "1px solid #f44336"
+                  }}
+                >
+                  <Typography variant="caption" color="text.secondary">
+                    Current IP: {ipAddress}
+                  </Typography>
+                  <br />
+                  <Typography 
+                    variant="caption" 
+                    color={isOfficeIP(ipAddress) ? "success.main" : "error.main"}
+                  >
+                    {isOfficeIP(ipAddress) 
+                      ? "✓ Office network detected" 
+                      : "⚠ Not connected to office network"}
+                  </Typography>
+                </Box>
+              )}
 
               {/* Terms & Conditions checkbox */}
               <FormControlLabel

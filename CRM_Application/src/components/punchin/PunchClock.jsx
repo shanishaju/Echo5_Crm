@@ -13,15 +13,18 @@ import StopIcon from "@mui/icons-material/Stop";
 import { toast } from "sonner";
 import axios from "axios";
 import { AttendanceApi } from "../../services/allapi";
+import { OFFICE_IPS, WORK_LOCATIONS, isOfficeIP } from "../../config/officeConfig";
 
 const PunchClock = () => {
   const theme = useTheme();
   const [time, setTime] = useState("00:00:00");
   const [ipAddress, setIpAddress] = useState("Fetching...");
   const [location, setLocation] = useState(null);
-  // const [punchedInAt, setPunchedInAt] = useState(null);
-  // const [punchedOutAt, setPunchedOutAt] = useState(null);
   const [workingTime, setWorkingTime] = useState("");
+
+  // Get work location from session storage
+  const workLocation = sessionStorage.getItem("workLocation");
+  const loginIP = sessionStorage.getItem("loginIP");
 
   const formatToIST = (utcTime) => {
     return new Date(utcTime).toLocaleString("en-IN", {
@@ -53,40 +56,55 @@ const PunchClock = () => {
       .then((res) => setIpAddress(res.data.ip))
       .catch(() => setIpAddress("Unavailable"));
   }, []);
-  console.log(ipAddress);
-  const handlePunchIn = async () => {
-    const response = await AttendanceApi({ ipAddress });
+    console.log(ipAddress)
+const handlePunchIn = async () => {
+  // Check if user selected office work location but is not on office network
+  if (workLocation === WORK_LOCATIONS.OFFICE && !isOfficeIP(ipAddress)) {
+    toast.error("Office punch-in is only allowed from office network. Please connect to office network or contact admin.");
+    return;
+  }
 
-    if (response?.status === 200) {
-      // setPunchedInAt(response.data?.punchIn || new Date().toISOString());
-      localStorage.setItem(
-        "punchedInAt",
-        JSON.stringify(response.data?.punchIn || new Date().toISOString())
-      );
-      // setPunchedOutAt(null);
-      localStorage.setItem("punchedOutAt", null);
-      setWorkingTime("");
-      toast.success("Punched In Successfully!");
-    } else {
-      toast.error(response?.response?.data?.message || "Punch In Failed");
-    }
-  };
+  const response = await AttendanceApi({ 
+    ipAddress,
+    workLocation: workLocation || WORK_LOCATIONS.HYBRID // Default to Hybrid if not set
+  });
 
-  const handlePunchOut = async () => {
-    const response = await AttendanceApi({ ipAddress });
+  if (response?.status === 200) {
+    localStorage.setItem("punchedInAt", JSON.stringify(response.data?.punchIn || new Date().toISOString()));
+    localStorage.setItem("punchedOutAt", null);
+    setWorkingTime("");
+    toast.success(`Punched In Successfully! (${workLocation || WORK_LOCATIONS.HYBRID} mode)`);
+  } else {
+    toast.error(response?.response?.data?.message || "Punch In Failed");
+  }
+};
 
-    if (response?.status === 200) {
-      const { punchOut, punchIn, workedTime } = response.data;
-      // setPunchedOutAt(punchOut);
-      localStorage.setItem("punchedOutAt", JSON.stringify(punchOut || null));
-      // setPunchedInAt(punchIn);
-      localStorage.setItem("punchedInAt", JSON.stringify(punchIn || null));
-      setWorkingTime(workedTime);
-      toast.success("Punched Out Successfully!");
-    } else {
-      toast.error("Punch Out Failed");
-    }
-  };
+const handlePunchOut = async () => {
+  // Check if user selected office work location but is not on office network
+  if (workLocation === WORK_LOCATIONS.OFFICE && !isOfficeIP(ipAddress)) {
+    toast.error("Office punch-out is only allowed from office network. Please connect to office network or contact admin.");
+    return;
+  }
+
+  const response = await AttendanceApi({ 
+    ipAddress,
+    workLocation: workLocation || WORK_LOCATIONS.HYBRID
+  });
+
+  if (response?.status === 200) {
+    const { punchOut, punchIn, workedTime } = response.data;
+    localStorage.setItem("punchedOutAt", JSON.stringify(punchOut || null));
+    localStorage.setItem("punchedInAt", JSON.stringify(punchIn || null));
+    setWorkingTime(workedTime);
+    toast.success(`Punched Out Successfully! (${workLocation || WORK_LOCATIONS.HYBRID} mode)`);
+  } else {
+    toast.error("Punch Out Failed");
+  }
+};
+
+const handleBreakTime = () => {
+  toast.info("Break time feature coming soon!");
+};
 
   const handleCheckLocation = () => {
     if (!navigator.geolocation) {
@@ -176,6 +194,47 @@ const PunchClock = () => {
             Punch In
           </Button>
         )}
+      </Box>
+
+      {/* Work Location and IP Status */}
+      <Box
+        sx={{
+          mb: 2,
+          p: 1.5,
+          borderRadius: 2,
+          backgroundColor: theme.palette.mode === "dark" ? "#64748b" : "#e3f2fd",
+          border: workLocation === WORK_LOCATIONS.OFFICE 
+            ? (isOfficeIP(ipAddress) ? "1px solid #4caf50" : "1px solid #f44336")
+            : "1px solid #2196f3"
+        }}
+      >
+        <Typography variant="body2" fontWeight={600} gutterBottom>
+          Work Mode: {workLocation || "Not Set"}
+        </Typography>
+        {/* <Typography variant="caption" color="text.secondary">
+          IP: {ipAddress}
+        </Typography> */}
+        {workLocation === WORK_LOCATIONS.OFFICE && (
+          <Typography 
+            variant="caption" 
+            display="block"
+            color={isOfficeIP(ipAddress) ? "success.main" : "error.main"}
+          >
+            {isOfficeIP(ipAddress) 
+              ? "✓ Office verified" 
+              : "⚠ Office Not verified - Please connect to office network"}
+          </Typography>
+        )}
+      </Box>
+      <Box>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleBreakTime}
+          sx={{ borderRadius: 25, ml: 4 }}
+        >
+          Break Time
+        </Button>
       </Box>
 
       {/* Location Button */}
