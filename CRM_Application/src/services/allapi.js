@@ -51,3 +51,7 @@ export const updateLeaveStatusApi = async (id, data) => {
 export const getMyLeavesApi = async () => {
   return await commonapi("GET", `${serverurl}/my-leave-requests`, null);
 };
+
+export const changePasswordApi = async (reqBody) => {
+  return await commonapi("PATCH", `${serverurl}/change-password`, reqBody);
+};

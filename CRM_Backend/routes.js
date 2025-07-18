@@ -1,6 +1,6 @@
 // routes/index.js
 const express = require("express");
-const {  registerEmployeeController, loginEmployeeController, getAllEmployeeController, deleteEmployeeController, editEmployeeController, updateEmployeeController} = require("./controller/employeeController"); 
+const {  registerEmployeeController, loginEmployeeController, getAllEmployeeController, deleteEmployeeController, editEmployeeController, updateEmployeeController, changePasswordController} = require("./controller/employeeController"); 
 const { AttendanceController, GetAttendanceSummaryController, GetMyAttendanceSummaryController} = require("./controller/puncinController"); 
 
 const verifyToken = require("./middleware/JwtMiddleware");
@@ -27,6 +27,8 @@ router.delete('/delete-employee/:id', deleteEmployeeController);
 router.get('/edit-employee/:id', editEmployeeController);
 
 router.put('/update-employee/:id', updateEmployeeController);
+
+router.patch("/change-password", verifyToken, changePasswordController);
 
 router.post("/leave-applications", verifyToken, leaveApplicationController);
 
