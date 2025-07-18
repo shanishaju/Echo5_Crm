@@ -53,17 +53,18 @@ function Calender() {
   };
 
   return (
-    <Box display="flex" justifyContent="center" mt={4}>
+    <Box display="flex" justifyContent="center" height="100%">
       <Paper
         elevation={4}
         sx={{
           px: 3,
           py: 4,
-          minWidth: 360,
-          maxWidth: 420,
           width: '100%',
+          height: '100%',
           borderRadius: 2,
           backgroundColor: 'background.paper',
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
         <Typography
@@ -80,9 +81,10 @@ function Calender() {
             onChange={(newValue) => setValue(newValue)}
             renderDay={renderHolidayDay}
             sx={{
+              width: '100%',
               '& .MuiPickersDay-root': {
-                width: 42,
-                height: 38,
+                width: 36,
+                height: 36,
                 fontWeight: 500,
               },
               '& .MuiPickersCalendarHeader-label': {

@@ -34,10 +34,22 @@ const EmployeeCard = ({
   icon,
   iconColor,
 }) => (
-  <Card sx={{ height: "100%", boxShadow: 3, borderRadius: 2, width: "100% " }}>
-    <CardContent>
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Box>
+  <Card sx={{ 
+    height: "100%", 
+    width: "100%", 
+    boxShadow: 3, 
+    borderRadius: 2,
+    display: "flex",
+    flexDirection: "column"
+  }}>
+    <CardContent sx={{ 
+      height: "100%", 
+      display: "flex", 
+      flexDirection: "column",
+      justifyContent: "center"
+    }}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" height="100%">
+        <Box display="flex" flexDirection="column" justifyContent="center">
           <Typography variant="subtitle2" color="text.secondary">
             {title}
           </Typography>
@@ -83,31 +95,40 @@ export default function FullWidthGrid() {
               <LogoutComponent onLogout={handleLogout} />
             </Grid>
           </Grid>
-          <Grid container size={{ md: 12 }} className=" ">
-            <Grid container size={{ sm: 12, md: 4 }} className="h-70 w-100 ">
-              {/* <EmployeeCard
-                title="Test Employee"
-                value="Platform Engineer"
-                percentage="+3%"
-                subtitle="since last week"
-                icon="👥"
-                iconColor="purple"
-              /> */}
-              <PunchClock />
+          <Grid container size={{ md: 12 }} spacing={3}>
+            <Grid size={{ sm: 12, md: 4 }}>
+              <Box sx={{ width: "100%", height: "420px" }}>
+                <PunchClock />
+              </Box>
             </Grid>
-            <Grid container size={{ sm: 12, md: 4 }} className=" h-70 w-100 ">
-              <EmployeeCard
-                title="Work Progress"
-                value="+3,462"
-                percentage="+50%"
-                subtitle="since last quarter"
-                icon="🧑‍💼"
-                iconColor="green"
-                
-              />
+            <Grid size={{ sm: 12, md: 4 }}>
+              <Box sx={{ width: "100%", height: "420px" }}>
+                <EmployeeCard
+                  title="Work Progress"
+                  value="+3,462"
+                  percentage="+50%"
+                  subtitle="since last quarter"
+                  icon="🧑‍💼"
+                  iconColor="green"
+                />
+              </Box>
             </Grid>
-            <Grid container size={{ sm: 12, md: 4 }} className=" h-70 w-100 ">
-              <Calender />
+            <Grid size={{ sm: 12, md: 4 }}>
+              <Box sx={{ width: "100%", height: "420px" }}>
+                <EmployeeCard
+                  title="Tasks Completed"
+                  value="127"
+                  percentage="+25%"
+                  subtitle="since last month"
+                  icon="✅"
+                  iconColor="blue"
+                />
+              </Box>
+            </Grid>
+            <Grid size={{ sm: 12, md: 4 }}>
+              <Box sx={{ width: "100%", height: "420px" }}>
+                <Calender />
+              </Box>
             </Grid>
           </Grid>
           <Grid container size={{ md: 12 }}>
