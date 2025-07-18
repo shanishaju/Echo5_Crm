@@ -7,7 +7,6 @@ import {
   Divider,
   useTheme,
 } from "@mui/material";
-import RoomIcon from "@mui/icons-material/Room";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
 import { toast } from "sonner";
@@ -19,12 +18,32 @@ const PunchClock = () => {
   const theme = useTheme();
   const [time, setTime] = useState("00:00:00");
   const [ipAddress, setIpAddress] = useState("Fetching...");
-  const [location, setLocation] = useState(null);
   const [workingTime, setWorkingTime] = useState("");
+  const [nextAutoPunchOut, setNextAutoPunchOut] = useState("");
 
   // Get work location from session storage
   const workLocation = sessionStorage.getItem("workLocation");
   const loginIP = sessionStorage.getItem("loginIP");
+
+  // Function to calculate next auto punch-out time
+  const getNextAutoPunchOutTime = () => {
+    const now = new Date();
+    const currentHour = now.getHours();
+    const currentMinute = now.getMinutes();
+    
+    // If before 1 PM, next is lunch break
+    if (currentHour < 13 || (currentHour === 13 && currentMinute === 0)) {
+      return "Lunch Break at 1:00 PM";
+    }
+    // If after 1 PM but before 6 PM, next is end of day
+    else if (currentHour < 18 || (currentHour === 18 && currentMinute === 0)) {
+      return "End of Day at 6:00 PM";
+    }
+    // If after 6 PM, next is tomorrow's lunch
+    else {
+      return "Tomorrow's Lunch at 1:00 PM";
+    }
+  };
 
   const formatToIST = (utcTime) => {
     return new Date(utcTime).toLocaleString("en-IN", {
@@ -43,12 +62,16 @@ const PunchClock = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTime(
-        new Date().toLocaleTimeString("en-IN", { timeZone: "Asia/Kolkata" })
-      );
+      const newTime = new Date().toLocaleTimeString("en-IN", { timeZone: "Asia/Kolkata" });
+      setTime(newTime);
+      
+      // Update next auto punch-out time
+      if (punchedInAt && !punchedOutAt) {
+        setNextAutoPunchOut(getNextAutoPunchOutTime());
+      }
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [punchedInAt, punchedOutAt]);
 
   useEffect(() => {
     axios
@@ -56,6 +79,83 @@ const PunchClock = () => {
       .then((res) => setIpAddress(res.data.ip))
       .catch(() => setIpAddress("Unavailable"));
   }, []);
+
+  // Auto punch-out functionality
+  useEffect(() => {
+    const checkAutoPunchOut = () => {
+      const now = new Date();
+      const currentHour = now.getHours();
+      const currentMinute = now.getMinutes();
+      
+      // Check if user is currently punched in
+      if (punchedInAt && !punchedOutAt) {
+        // Warning at 12:55 PM (5 minutes before lunch)
+        if (currentHour === 12 && currentMinute === 55) {
+          toast.warning("⚠️ Auto punch-out for lunch break in 5 minutes (1:00 PM)", {
+            duration: 5000,
+            style: {
+              background: '#ff9800',
+              color: 'white',
+              fontWeight: 'bold'
+            }
+          });
+        }
+        // Warning at 5:55 PM (5 minutes before end of day)
+        else if (currentHour === 17 && currentMinute === 55) {
+          toast.warning("⚠️ Auto punch-out for end of day in 5 minutes (6:00 PM)", {
+            duration: 5000,
+            style: {
+              background: '#ff9800',
+              color: 'white',
+              fontWeight: 'bold'
+            }
+          });
+        }
+        // Auto punch-out at 1:00 PM (13:00) for lunch break
+        else if (currentHour === 13 && currentMinute === 0) {
+          handleAutoPunchOut("🍽️ Lunch Break - Auto punch-out at 1:00 PM");
+        }
+        // Auto punch-out at 6:00 PM (18:00) for end of day
+        else if (currentHour === 18 && currentMinute === 0) {
+          handleAutoPunchOut("🏠 End of Day - Auto punch-out at 6:00 PM");
+        }
+      }
+    };
+
+    // Check every minute
+    const interval = setInterval(checkAutoPunchOut, 60000);
+    return () => clearInterval(interval);
+  }, [punchedInAt, punchedOutAt]);
+
+  // Function to handle automatic punch-out
+  const handleAutoPunchOut = async (message) => {
+    try {
+      const response = await AttendanceApi({ 
+        ipAddress,
+        workLocation: workLocation || WORK_LOCATIONS.HYBRID
+      });
+
+      if (response?.status === 200) {
+        const { punchOut, punchIn, workedTime } = response.data;
+        localStorage.setItem("punchedOutAt", JSON.stringify(punchOut || null));
+        localStorage.setItem("punchedInAt", JSON.stringify(punchIn || null));
+        setWorkingTime(workedTime);
+        
+        // Show notification with custom message
+        toast.info(message, {
+          duration: 5000,
+          style: {
+            background: '#2196f3',
+            color: 'white',
+            fontWeight: 'bold'
+          }
+        });
+      }
+    } catch (error) {
+      console.error("Auto punch-out failed:", error);
+      toast.error("Auto punch-out failed. Please punch out manually.");
+    }
+  };
     console.log(ipAddress)
 const handlePunchIn = async () => {
   // Check if user selected office work location but is not on office network
@@ -102,49 +202,14 @@ const handlePunchOut = async () => {
   }
 };
 
-const handleBreakTime = () => {
-  toast.info("Break time feature coming soon!");
-};
-
-  const handleCheckLocation = () => {
-    if (!navigator.geolocation) {
-      toast.error("Geolocation not supported.");
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords;
-        setLocation({ latitude, longitude });
-        toast.success("Location fetched!");
-      },
-      (err) => {
-        switch (err.code) {
-          case 1:
-            toast.error("Permission denied.");
-            break;
-          case 2:
-            toast.error("Location unavailable.");
-            break;
-          case 3:
-            toast.error("Request timed out.");
-            break;
-          default:
-            toast.error("Geolocation error.");
-        }
-      },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-    );
-  };
-
   return (
     <Paper
       elevation={3}
       sx={{
         borderRadius: 2,
         p: 2,
-        width: 450,
-        minHeight: 350,
+        width: "100%",
+        height: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
@@ -226,50 +291,31 @@ const handleBreakTime = () => {
           </Typography>
         )}
       </Box>
-      <Box>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleBreakTime}
-          sx={{ borderRadius: 25, ml: 4 }}
-        >
-          Break Time
-        </Button>
-      </Box>
 
-      {/* Location Button */}
-      <Button
-        onClick={handleCheckLocation}
-        variant="outlined"
-        fullWidth
-        sx={{
-          borderRadius: 25,
-          textTransform: "none",
-        }}
-      >
-        📍 Check My Current Location
-      </Button>
-
-      {/* Location display */}
-      {location && (
-        <Typography
-          mt={2}
-          fontSize="0.85rem"
+      {/* Auto Punch-out Schedule */}
+      {punchedInAt && !punchedOutAt && (
+        <Box
           sx={{
-            backgroundColor:
-              theme.palette.mode === "dark" ? "#64748b" : "#e3f2fd",
-            p: 1,
+            mb: 2,
+            p: 1.5,
             borderRadius: 2,
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-            fontWeight: 500,
+            backgroundColor: theme.palette.mode === "dark" ? "#4a5568" : "#fff3e0",
+            border: "1px solid #ff9800"
           }}
         >
-          <RoomIcon fontSize="small" color="primary" />
-          Lat: {location.latitude.toFixed(4)}, Lon:{" "}
-          {location.longitude.toFixed(4)}
-        </Typography>
+          <Typography variant="body2" fontWeight={600} gutterBottom color="#ff9800">
+            📅 Auto Punch-out Schedule
+          </Typography>
+          <Typography variant="caption" display="block" color="text.secondary">
+            • Lunch Break: 1:00 PM
+          </Typography>
+          <Typography variant="caption" display="block" color="text.secondary">
+            • End of Day: 6:00 PM
+          </Typography>
+          <Typography variant="caption" display="block" color="primary.main" fontWeight={600}>
+            Next: {nextAutoPunchOut}
+          </Typography>
+        </Box>
       )}
 
       <Divider sx={{ my: 3 }} />
