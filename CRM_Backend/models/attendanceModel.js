@@ -10,6 +10,11 @@ const attendanceSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  workLocation: {
+    type: String,
+    enum: ["Office", "Hybrid"],
+    default: "Hybrid",
+  },
   location: {
     latitude: Number,
     longitude: Number,
