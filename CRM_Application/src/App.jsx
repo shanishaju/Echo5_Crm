@@ -15,6 +15,7 @@ import Attendance from "./components/admin/Attendance";
 import AttendanceSummary from "./components/AttendanceSummary";
 import AdminLeaveManagement from "./components/admin/AdminLeaveManagement";
 import UnderConstruction from "./components/cards/UnderConstruction";
+import ProfileSettings from "./components/profilesettings/ProfileSettings";
 
 function App() {
   return (
@@ -67,7 +68,7 @@ function App() {
         <Route path="/my-attendance" element={<AttendanceSummary />} />
         <Route path="/apply-leave" element={<LeaveApplication />} />
         <Route path="/maintenance" element={<UnderConstruction/>} />
-
+        <Route path="/profile-settings" element={<ProfileSettings/>} />
 
       </Routes>
     </Router>

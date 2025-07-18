@@ -7,7 +7,7 @@ import {
   Alert,
   Paper
 } from '@mui/material';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, useWatch } from 'react-hook-form';
 import DashBoardSidebar from '../Sidebar/DashBoardSidebar';
 
 function ProfileSettings() {
@@ -15,11 +15,17 @@ function ProfileSettings() {
     control,
     handleSubmit,
     reset,
-    watch,
     formState: { errors }
-  } = useForm();
+  } = useForm({
+      mode: 'onChange'
+  });
 
-  const newPasswordValue = watch('newPassword');
+  // Live watch of newPassword field
+  const newPasswordValue = useWatch({
+    control,
+    name: 'newPassword',
+  });
+
   const [message, setMessage] = React.useState('');
   const [messageType, setMessageType] = React.useState('success');
 
@@ -97,10 +103,11 @@ function ProfileSettings() {
             name="confirmPassword"
             control={control}
             defaultValue=""
-            rules={{ required: 'Please confirm your new password',validate: value =>
+            rules={{
+              required: 'Please confirm your new password',
+              validate: value =>
                 value === newPasswordValue || 'Passwords do not match'
-             }}
-            
+            }}
             render={({ field }) => (
               <TextField
                 {...field}
