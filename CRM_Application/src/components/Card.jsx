@@ -34,17 +34,17 @@ const EmployeeCard = ({
   icon,
   iconColor,
 }) => (
-  <Card sx={{ 
-    height: "100%", 
-    width: "100%", 
-    boxShadow: 3, 
+  <Card sx={{
+    height: "100%",
+    width: "100%",
+    boxShadow: 3,
     borderRadius: 2,
     display: "flex",
     flexDirection: "column"
   }}>
-    <CardContent sx={{ 
-      height: "100%", 
-      display: "flex", 
+    <CardContent sx={{
+      height: "100%",
+      display: "flex",
       flexDirection: "column",
       justifyContent: "center"
     }}>
@@ -130,28 +130,23 @@ export default function FullWidthGrid() {
                 <Calender />
               </Box>
             </Grid>
-          </Grid>
-          <Grid container size={{ md: 12 }}>
-            <Grid container size={{ md: 4, sm: 12 }}>
-              {/* <Calender /> */}
+            <Grid size={{ sm: 12, md: 4 }}>
+              <Box sx={{ width: "100%", height: "420px" }}>
+                <TimingChart />
+              </Box>
+            </Grid>
+            <Grid size={{ sm: 12, md: 4 }}>
+              <Box sx={{ width: "100%", height: "420px" }}>
+              <PerformanceChart />
+              </Box>
             </Grid>
 
-            {/* <Grid
-              size={{ md: 4, sm: 12, }}
-              display="flex"
-              justifyContent="center"
-            >
-              <PerformanceChart />
-            </Grid> */}
-            {/* <Grid
-              container
-              size={{ md: 4, sm: 12 }}
-              display="flex"
-              justifyContent="center"
-            >
-              <TimingChart />
-            </Grid> */}
+
+
+
+
           </Grid>
+
         </Grid>
       </Grid>
     </Box>

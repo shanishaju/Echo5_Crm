@@ -69,7 +69,8 @@ function PerformanceChart() {
 
         background: "linear-gradient(to bottom, #2c2c2c, #1e1e1e)",
         color: "#fff",
-        height: 300, //  Control height
+        height: 420, //  Control height
+        justifyContent: "center",
       }}
     >
 
@@ -80,7 +81,7 @@ function PerformanceChart() {
         <span style={{ color: "#22c55e", fontWeight: 600 }}>▲ 4%</span>{" "}
         improvement over the past 6 months
       </Typography>
-      <Box sx={{ height: 150 }}>
+      <Box sx={{ height: 300 }}>
         <Line data={data} options={options} />
       </Box>
     </Paper>

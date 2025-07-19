@@ -311,7 +311,7 @@ const LeaveApplication = () => {
                       variant="text"
                       onClick={() => reset()}
                       sx={{
-                        backgroundColor: "#5567ff",
+                        backgroundColor: "#1e90ff",
                         color: "#fff",
                         textTransform: "none",
                         px: 4,
@@ -323,7 +323,7 @@ const LeaveApplication = () => {
                       type="submit"
                       variant="contained"
                       sx={{
-                        backgroundColor: "#5567ff",
+                        backgroundColor: "#1e90ff",
                         color: "#fff",
                         textTransform: "none",
                         px: 4,
