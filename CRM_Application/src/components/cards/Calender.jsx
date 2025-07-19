@@ -12,6 +12,7 @@ import {
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isToday, isSameMonth } from 'date-fns';
 
+
 // Sample holidays with custom colors
 const holidays = [
   { date: new Date('2025-01-26'), name: 'Republic Day', color: '#ff6b35', type: 'national' },
@@ -22,6 +23,7 @@ const holidays = [
   { date: new Date('2025-11-07'), name: 'Diwali', color: '#f39c12', type: 'religious' },
   { date: new Date('2025-03-14'), name: 'Holi', color: '#e91e63', type: 'religious' },
   { date: new Date('2025-05-01'), name: 'Labour Day', color: '#27ae60', type: 'public' },
+
 ];
 
 function Calender() {
@@ -47,6 +49,7 @@ function Calender() {
   const getHoliday = (date) => {
     return holidays.find(holiday => isSameDay(date, holiday.date));
   };
+
 
   // Handle date click
   const handleDateClick = (date) => {
@@ -82,6 +85,8 @@ function Calender() {
               fontWeight: 'bold',
               color: '#4fd1c7',
               fontSize: '1.5rem'
+
+
             }}
           >
             {format(displayDate, "MMMM yyyy")}
